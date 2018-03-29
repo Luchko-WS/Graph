@@ -14,8 +14,10 @@ namespace Graph
         {
             InitializeComponent();
             _repository = new GraphVertexesRepository();
-            _pointViewer = new Viewer(this, _repository);
-            _pointViewer.SaveProportions = true;
+            _pointViewer = new Viewer(this, _repository)
+            {
+                SaveProportions = true
+            };
             this.MouseClick += DrawForm_MouseClick;
             this.SizeChanged += DrawForm_SizeChanged;
             this.KeyDown += DrawForm_KeyDown;
@@ -70,7 +72,7 @@ namespace Graph
                 }
                 else if(_isConnectingKeyIsPressed)
                 {
-                    //_repository.Connect()
+                    _repository.ConnectVertexWith(e.X, e.Y);
                 }
                 else
                 {

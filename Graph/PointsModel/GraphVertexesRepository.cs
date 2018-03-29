@@ -87,10 +87,10 @@ namespace Graph.PointsModel
             _selectedVertexes.Clear();
         }
 
-        public void ConnectVertex(int x, int y)
+        public void ConnectVertexWith(int x, int y)
         {
             var sourceVertex = _selectedVertexes.FirstOrDefault();
-            if(sourceVertex != null)
+            if (sourceVertex != null)
             {
                 var vertex = _vertexesList.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
                 if(vertex != null)
