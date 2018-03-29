@@ -7,6 +7,7 @@ namespace Graph.PointsModel
     {
         private Rectangle _clientRectangle;
         private int _diameter = 8;
+        private HashSet<GraphVertex> _relativeVertexes;
 
         public GraphVertex(int x, int y)
         {
@@ -16,6 +17,11 @@ namespace Graph.PointsModel
         public Rectangle ClientRectangle
         {
             get { return _clientRectangle; }
+        }
+
+        public HashSet<GraphVertex> RelativeVertexes
+        {
+            get { return _relativeVertexes; }
         }
 
         public void ChangePointLocation(int x, int y)
@@ -38,6 +44,11 @@ namespace Graph.PointsModel
         public int GetHashCode(GraphVertex obj)
         {
             return obj._clientRectangle.X ^ obj._clientRectangle.Y;
+        }
+
+        private Point GetCentre()
+        {
+            return new Point(_clientRectangle.X + _diameter / 2, _clientRectangle.Y + _diameter / 2);
         }
     }
 }

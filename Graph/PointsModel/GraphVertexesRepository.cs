@@ -11,8 +11,8 @@ namespace Graph.PointsModel
         private HashSet<GraphVertex> _vertexesList = new HashSet<GraphVertex>();
         private ObservableCollection<GraphVertex> _selectedVertexes = new ObservableCollection<GraphVertex>();
 
-        public event VertexArg OnDrawPoint;
-        public event VertexArg OnRemovePoint;
+        public event VertexArg OnDrawVertex;
+        public event VertexArg OnRemoveVertex;
 
         public IEnumerable<GraphVertex> Vertexes
         {
@@ -36,10 +36,10 @@ namespace Graph.PointsModel
             if (!_vertexesList.Contains(newVertex))
             {
                 _vertexesList.Add(newVertex);
-                var handler = OnDrawPoint;
+                var handler = OnDrawVertex;
                 if (handler != null)
                 {
-                    OnDrawPoint.Invoke(newVertex);
+                    OnDrawVertex.Invoke(newVertex);
                 }
             }
         }
@@ -66,15 +66,20 @@ namespace Graph.PointsModel
             }
         }
 
+        public void ClearSelecting()
+        {
+            _selectedVertexes.Clear();
+        }
+
         public void RemoveSelectedVertexes()
         {
             foreach (var item in _selectedVertexes)
             {
                 _vertexesList.Remove(item);
-                var handler = OnRemovePoint;
+                var handler = OnRemoveVertex;
                 if (handler != null)
                 {
-                    OnDrawPoint.Invoke(item);
+                    OnRemoveVertex.Invoke(item);
                 }
             }
             _selectedVertexes.Clear();

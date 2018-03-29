@@ -21,13 +21,12 @@ namespace Graph.PointsModel
             _graphicControl = control;
             _fixedHeight = _graphicControl.Height;
             _fixedWidth = _graphicControl.Width;
-
             _graphics = _graphicControl.CreateGraphics();
 
             _repository = repository;
-            _repository.OnDrawPoint += _repository_DrawPoint;
+            _repository.OnDrawVertex += _repository_DrawVertex;
             _repository.SelectedVertexes.CollectionChanged += SelectedPoints_CollectionChanged;
-            _repository.OnRemovePoint += _repository_OnRemovePoint;
+            _repository.OnRemoveVertex += _repository_OnRemoveVertex;
         }
 
         public bool CacheDrawing
@@ -63,6 +62,7 @@ namespace Graph.PointsModel
                         vertex.ChangePointLocation((int)((double)vertex.ClientRectangle.X / _fixedWidth * _graphicControl.Width),
                             (int)((double)vertex.ClientRectangle.Y / _fixedHeight * _graphicControl.Height));
                     }
+
                     if (_repository.SelectedVertexes.Contains(vertex))
                     {
                         DrawVertex(vertex.ClientRectangle, Brushes.Red);
@@ -75,12 +75,12 @@ namespace Graph.PointsModel
             }
         }
 
-        private void _repository_DrawPoint(GraphVertex vertex)
+        private void _repository_DrawVertex(GraphVertex vertex)
         {
             DrawVertex(vertex.ClientRectangle, Brushes.Black);
         }
 
-        private void _repository_OnRemovePoint(GraphVertex vertex)
+        private void _repository_OnRemoveVertex(GraphVertex vertex)
         {
             DrawVertex(vertex.ClientRectangle, new SolidBrush(_backgroundColor));
         }
@@ -102,6 +102,9 @@ namespace Graph.PointsModel
                         var vertex = (GraphVertex)item;
                         DrawVertex(vertex.ClientRectangle, Brushes.Black);
                     }
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    Invalidate();
                     break;
             }
         }

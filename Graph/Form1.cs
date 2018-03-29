@@ -24,12 +24,23 @@ namespace Graph
 
         private void DrawForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.D) _isDrawingKeyIsPressed = true;
+            switch (e.KeyCode)
+            {
+                case Keys.A:
+                    _isDrawingKeyIsPressed = true;
+                    break;
+                case Keys.C:
+                    _repository.ClearSelecting();
+                    break;
+                case Keys.Delete:
+                    _repository.RemoveSelectedVertexes();
+                    break;
+            }
         }
 
         private void DrawForm_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.D) _isDrawingKeyIsPressed = false;
+            if (e.KeyCode == Keys.A) _isDrawingKeyIsPressed = false;
         }
 
         private void DrawForm_SizeChanged(object sender, System.EventArgs e)
