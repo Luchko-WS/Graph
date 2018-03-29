@@ -27,6 +27,7 @@ namespace Graph.PointsModel
             _repository.OnDrawVertex += _repository_DrawVertex;
             _repository.SelectedVertexes.CollectionChanged += SelectedPoints_CollectionChanged;
             _repository.OnRemoveVertex += _repository_OnRemoveVertex;
+            _repository.OnVertexesConnected += _repository_OnVertexesConnected;
         }
 
         public bool CacheDrawing
@@ -49,6 +50,16 @@ namespace Graph.PointsModel
             }
         }
 
+        public void DrawEdge(GraphVertex x, GraphVertex y, Brush brush)
+        {
+            if (_graphics != null)
+            {
+                Point A = x.GetCentreOfClientRectangle();
+                Point B = y.GetCentreOfClientRectangle();
+                _graphics.DrawLine(new Pen(brush, 4), A, B);
+            }
+        }
+
         public void Invalidate()
         {
             if (!_cacheDrawing)
@@ -61,6 +72,15 @@ namespace Graph.PointsModel
                     {
                         vertex.ChangePointLocation((int)((double)vertex.ClientRectangle.X / _fixedWidth * _graphicControl.Width),
                             (int)((double)vertex.ClientRectangle.Y / _fixedHeight * _graphicControl.Height));
+                    }
+                }
+
+                //optimize it
+                foreach (var vertex in _repository.Vertexes)
+                {
+                    foreach (var relVertex in vertex.RelativeVertexes)
+                    {
+                        DrawEdge(vertex, relVertex, Brushes.Black);
                     }
 
                     if (_repository.SelectedVertexes.Contains(vertex))
@@ -83,6 +103,11 @@ namespace Graph.PointsModel
         private void _repository_OnRemoveVertex(GraphVertex vertex)
         {
             DrawVertex(vertex.ClientRectangle, new SolidBrush(_backgroundColor));
+        }
+
+        private void _repository_OnVertexesConnected(GraphVertex x, GraphVertex y, Brush brush)
+        {
+            DrawEdge(x, y, Brushes.Black);
         }
 
         private void SelectedPoints_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

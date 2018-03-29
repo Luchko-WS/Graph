@@ -30,11 +30,6 @@ namespace Graph.PointsModel
             _clientRectangle.Location = new Point(x, y);
         }
 
-        public bool IsContainsPoint(int x, int y)
-        {
-            return _clientRectangle.Contains(x, y);
-        }
-
         public bool Equals(GraphVertex x, GraphVertex y)
         {
             return x._clientRectangle.X.Equals(y._clientRectangle.X) &&
@@ -46,7 +41,7 @@ namespace Graph.PointsModel
             return obj._clientRectangle.X ^ obj._clientRectangle.Y;
         }
 
-        private Point GetCentre()
+        public Point GetCentreOfClientRectangle()
         {
             return new Point(_clientRectangle.X + _diameter / 2, _clientRectangle.Y + _diameter / 2);
         }

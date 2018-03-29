@@ -8,6 +8,7 @@ namespace Graph
         GraphVertexesRepository _repository;
         Viewer _pointViewer;
         bool _isDrawingKeyIsPressed = false;
+        bool _isConnectingKeyIsPressed = false;
 
         public DrawForm()
         {
@@ -32,6 +33,9 @@ namespace Graph
                 case Keys.C:
                     _repository.ClearSelecting();
                     break;
+                case Keys.R:
+                    _isConnectingKeyIsPressed = true;
+                    break;
                 case Keys.Delete:
                     _repository.RemoveSelectedVertexes();
                     break;
@@ -40,7 +44,15 @@ namespace Graph
 
         private void DrawForm_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.A) _isDrawingKeyIsPressed = false;
+            switch (e.KeyCode)
+            {
+                case Keys.A:
+                    _isDrawingKeyIsPressed = false;
+                    break;
+                case Keys.R:
+                    _isConnectingKeyIsPressed = false;
+                    break;
+            }
         }
 
         private void DrawForm_SizeChanged(object sender, System.EventArgs e)
@@ -55,6 +67,10 @@ namespace Graph
                 if (_isDrawingKeyIsPressed)
                 {
                     _repository.CreateVertex(e.X, e.Y);
+                }
+                else if(_isConnectingKeyIsPressed)
+                {
+                    //_repository.Connect()
                 }
                 else
                 {

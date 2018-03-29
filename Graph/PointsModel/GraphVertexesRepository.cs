@@ -5,6 +5,7 @@ using System.Linq;
 namespace Graph.PointsModel
 {
     public delegate void VertexArg(GraphVertex vertex);
+    public delegate void VertexPairArg(GraphVertex x, GraphVertex y);
 
     public class GraphVertexesRepository
     {
@@ -13,6 +14,7 @@ namespace Graph.PointsModel
 
         public event VertexArg OnDrawVertex;
         public event VertexArg OnRemoveVertex;
+        public event VertexPairArg OnVertexesConnected;
 
         public IEnumerable<GraphVertex> Vertexes
         {
@@ -46,23 +48,23 @@ namespace Graph.PointsModel
 
         public bool SelectVertex(int x, int y)
         {
-            var vertexes = _vertexesList.Where(v => v.IsContainsPoint(x, y)).ToList();
-            switch (vertexes.Count)
+            var vertex = _vertexesList.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
+            if (vertex != null)
             {
-                case 0:
-                    return false;
-                default:
-                    var newVertex = vertexes.First();
-                    var oldVertex = _selectedVertexes.FirstOrDefault(v => v.Equals(newVertex));
-                    if (oldVertex != null)
-                    {
-                        _selectedVertexes.Remove(oldVertex);
-                    }
-                    else
-                    {
-                        _selectedVertexes.Add(newVertex);
-                    }
-                    return true;
+                var oldVertex = _selectedVertexes.FirstOrDefault(v => v.Equals(vertex));
+                if (oldVertex != null)
+                {
+                    _selectedVertexes.Remove(oldVertex);
+                }
+                else
+                {
+                    _selectedVertexes.Add(vertex);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -83,6 +85,25 @@ namespace Graph.PointsModel
                 }
             }
             _selectedVertexes.Clear();
+        }
+
+        public void ConnectVertex(int x, int y)
+        {
+            var sourceVertex = _selectedVertexes.FirstOrDefault();
+            if(sourceVertex != null)
+            {
+                var vertex = _vertexesList.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
+                if(vertex != null)
+                {
+                    sourceVertex.RelativeVertexes.Add(vertex);
+                    vertex.RelativeVertexes.Add(sourceVertex);
+                    var handler = OnVertexesConnected;
+                    if (handler != null)
+                    {
+                        OnVertexesConnected.Invoke(sourceVertex, vertex);
+                    }
+                }
+            }
         }
     }
 }
