@@ -105,7 +105,7 @@ namespace Graph.PointsModel
             DrawVertex(vertex.ClientRectangle, new SolidBrush(_backgroundColor));
         }
 
-        private void _repository_OnVertexesConnected(GraphVertex x, GraphVertex y, Brush brush)
+        private void _repository_OnVertexesConnected(GraphVertex x, GraphVertex y)
         {
             DrawEdge(x, y, Brushes.Black);
         }

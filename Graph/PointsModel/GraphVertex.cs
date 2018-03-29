@@ -30,6 +30,11 @@ namespace Graph.PointsModel
             _clientRectangle.Location = new Point(x, y);
         }
 
+        public bool IsContainsPoint(int x, int y)
+        {
+            return _clientRectangle.Contains(x, y);
+        }
+
         public bool Equals(GraphVertex x, GraphVertex y)
         {
             return x._clientRectangle.X.Equals(y._clientRectangle.X) &&
