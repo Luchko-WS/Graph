@@ -51,8 +51,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="PointsModel\GRPoint.cs" />
-    <Compile Include="PointsModel\GRPointRepository.cs" />
+    <Compile Include="PointsModel\GraphVertex.cs" />
+    <Compile Include="PointsModel\GraphVertexesRepository.cs" />
     <Compile Include="PointsModel\Viewer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
