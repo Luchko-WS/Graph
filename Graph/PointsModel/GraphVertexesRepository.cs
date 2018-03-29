@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Linq;
 
 namespace Graph.PointsModel
 {
-    public delegate void VertexArg(Rectangle rectangle);
+    public delegate void VertexArg(GraphVertex vertex);
 
     public class GraphVertexesRepository
-    {     
-        public event VertexArg DrawPoint;
+    {
+        private HashSet<GraphVertex> _vertexesList = new HashSet<GraphVertex>();
+        private ObservableCollection<GraphVertex> _selectedVertexes = new ObservableCollection<GraphVertex>();
+
+        public event VertexArg OnDrawPoint;
+        public event VertexArg OnRemovePoint;
 
         public IEnumerable<GraphVertex> Vertexes
         {
@@ -33,10 +36,10 @@ namespace Graph.PointsModel
             if (!_vertexesList.Contains(newVertex))
             {
                 _vertexesList.Add(newVertex);
-                var handler = DrawPoint;
+                var handler = OnDrawPoint;
                 if (handler != null)
                 {
-                    DrawPoint.Invoke(newVertex.ClientRectangle);
+                    OnDrawPoint.Invoke(newVertex);
                 }
             }
         }
@@ -63,7 +66,18 @@ namespace Graph.PointsModel
             }
         }
 
-        private HashSet<GraphVertex> _vertexesList = new HashSet<GraphVertex>();
-        private ObservableCollection<GraphVertex> _selectedVertexes = new ObservableCollection<GraphVertex>();
+        public void RemoveSelectedVertexes()
+        {
+            foreach (var item in _selectedVertexes)
+            {
+                _vertexesList.Remove(item);
+                var handler = OnRemovePoint;
+                if (handler != null)
+                {
+                    OnDrawPoint.Invoke(item);
+                }
+            }
+            _selectedVertexes.Clear();
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace Graph.PointsModel
     public class GraphVertex : IEqualityComparer<GraphVertex>
     {
         private Rectangle _clientRectangle;
-        private int _diameter = 4;
+        private int _diameter = 8;
 
         public GraphVertex(int x, int y)
         {

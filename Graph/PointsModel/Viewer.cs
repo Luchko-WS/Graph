@@ -6,6 +6,16 @@ namespace Graph.PointsModel
 {
     public class Viewer
     {
+        private Control _graphicControl;
+        private Graphics _graphics;
+        private GraphVertexesRepository _repository;
+        private Color _backgroundColor = Color.LightGray;
+
+        private bool _saveProportions;
+        private bool _cacheDrawing;
+        private int _fixedHeight;
+        private int _fixedWidth;
+
         public Viewer(Control control, GraphVertexesRepository repository)
         {
             _graphicControl = control;
@@ -15,8 +25,9 @@ namespace Graph.PointsModel
             _graphics = _graphicControl.CreateGraphics();
 
             _repository = repository;
-            _repository.DrawPoint += _repository_DrawPoint;
+            _repository.OnDrawPoint += _repository_DrawPoint;
             _repository.SelectedVertexes.CollectionChanged += SelectedPoints_CollectionChanged;
+            _repository.OnRemovePoint += _repository_OnRemovePoint;
         }
 
         public bool CacheDrawing
@@ -44,7 +55,7 @@ namespace Graph.PointsModel
             if (!_cacheDrawing)
             {
                 _graphics = _graphicControl.CreateGraphics();
-                _graphics.Clear(Color.LightGray);
+                _graphics.Clear(_backgroundColor);
                 foreach (var vertex in _repository.Vertexes)
                 {
                     if (_saveProportions)
@@ -64,9 +75,14 @@ namespace Graph.PointsModel
             }
         }
 
-        private void _repository_DrawPoint(Rectangle rectangle)
+        private void _repository_DrawPoint(GraphVertex vertex)
         {
-            DrawVertex(rectangle, Brushes.Black);
+            DrawVertex(vertex.ClientRectangle, Brushes.Black);
+        }
+
+        private void _repository_OnRemovePoint(GraphVertex vertex)
+        {
+            DrawVertex(vertex.ClientRectangle, new SolidBrush(_backgroundColor));
         }
 
         private void SelectedPoints_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -89,14 +105,5 @@ namespace Graph.PointsModel
                     break;
             }
         }
-
-        private Control _graphicControl;
-        private Graphics _graphics;
-        private GraphVertexesRepository _repository;
-
-        private bool _saveProportions;
-        private bool _cacheDrawing;
-        private int _fixedHeight;
-        private int _fixedWidth;
     }
 }
