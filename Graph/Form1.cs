@@ -9,6 +9,7 @@ namespace Graph
         Viewer _pointViewer;
         bool _isDrawingKeyIsPressed = false;
         bool _isConnectingKeyIsPressed = false;
+        bool _isChoosingConnectingSourceKeyIsPressed = false;
 
         public DrawForm()
         {
@@ -38,6 +39,9 @@ namespace Graph
                 case Keys.R:
                     _isConnectingKeyIsPressed = true;
                     break;
+                case Keys.S:
+                    _isChoosingConnectingSourceKeyIsPressed = true;
+                    break;
                 case Keys.Delete:
                     _repository.RemoveSelectedVertexes();
                     break;
@@ -53,6 +57,9 @@ namespace Graph
                     break;
                 case Keys.R:
                     _isConnectingKeyIsPressed = false;
+                    break;
+                case Keys.S:
+                    _isChoosingConnectingSourceKeyIsPressed = false;
                     break;
             }
         }
@@ -73,6 +80,10 @@ namespace Graph
                 else if(_isConnectingKeyIsPressed)
                 {
                     _repository.ConnectVertexWith(e.X, e.Y);
+                }
+                else if(_isChoosingConnectingSourceKeyIsPressed)
+                {
+                    _repository.SetConnectingVertex(e.X, e.Y);
                 }
                 else
                 {

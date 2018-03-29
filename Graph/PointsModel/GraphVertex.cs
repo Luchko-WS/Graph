@@ -12,6 +12,7 @@ namespace Graph.PointsModel
         public GraphVertex(int x, int y)
         {
             _clientRectangle = new Rectangle(x, y, _diameter, _diameter);
+            _relativeVertexes = new HashSet<GraphVertex>();
         }
 
         public Rectangle ClientRectangle

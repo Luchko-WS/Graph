@@ -11,6 +11,7 @@ namespace Graph.PointsModel
     {
         private HashSet<GraphVertex> _vertexesList = new HashSet<GraphVertex>();
         private ObservableCollection<GraphVertex> _selectedVertexes = new ObservableCollection<GraphVertex>();
+        private GraphVertex _connectingVertex;
 
         public event VertexArg OnDrawVertex;
         public event VertexArg OnRemoveVertex;
@@ -18,18 +19,18 @@ namespace Graph.PointsModel
 
         public IEnumerable<GraphVertex> Vertexes
         {
-            get
-            {
-                return _vertexesList;
-            }
+            get { return _vertexesList; }
         }
 
         public ObservableCollection<GraphVertex> SelectedVertexes
         {
-            get
-            {
-                return _selectedVertexes;
-            }
+            get { return _selectedVertexes; }
+        }
+
+        public void SetConnectingVertex(int x, int y)
+        {
+            var vertex = _vertexesList.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
+            _connectingVertex = vertex;
         }
 
         public void CreateVertex(int x, int y)
@@ -89,18 +90,17 @@ namespace Graph.PointsModel
 
         public void ConnectVertexWith(int x, int y)
         {
-            var sourceVertex = _selectedVertexes.FirstOrDefault();
-            if (sourceVertex != null)
+            if (_connectingVertex != null)
             {
                 var vertex = _vertexesList.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
                 if(vertex != null)
                 {
-                    sourceVertex.RelativeVertexes.Add(vertex);
-                    vertex.RelativeVertexes.Add(sourceVertex);
+                    _connectingVertex.RelativeVertexes.Add(vertex);
+                    vertex.RelativeVertexes.Add(_connectingVertex);
                     var handler = OnVertexesConnected;
                     if (handler != null)
                     {
-                        OnVertexesConnected.Invoke(sourceVertex, vertex);
+                        OnVertexesConnected.Invoke(_connectingVertex, vertex);
                     }
                 }
             }
