@@ -3,10 +3,10 @@ using System.Drawing;
 
 namespace Graph.PointsModel
 {
-    public class GraphVertex : IEqualityComparer<GraphVertex>
+    public class GraphVertex : ISelectableGraphElement<GraphVertex>
     {
         private Rectangle _clientRectangle;
-        private int _diameter = 8;
+        private int _diameter = 10;
         private HashSet<GraphVertex> _relativeVertexes;
 
         public GraphVertex(int x, int y)
@@ -25,7 +25,7 @@ namespace Graph.PointsModel
             get { return _relativeVertexes; }
         }
 
-        public void ChangePointLocation(int x, int y)
+        public void ChangeLocation(int x, int y)
         {
             if (x < 0 || y < 0) return;
             _clientRectangle.Location = new Point(x, y);

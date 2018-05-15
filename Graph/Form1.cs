@@ -1,5 +1,5 @@
-﻿using System.Windows.Forms;
-using Graph.PointsModel;
+﻿using Graph.PointsModel;
+using System.Windows.Forms;
 
 namespace Graph
 {
@@ -19,11 +19,10 @@ namespace Graph
             {
                 SaveProportions = true
             };
+
             this.MouseClick += DrawForm_MouseClick;
-            this.SizeChanged += DrawForm_SizeChanged;
             this.KeyDown += DrawForm_KeyDown;
             this.KeyUp += DrawForm_KeyUp;
-
         }
 
         private void DrawForm_KeyDown(object sender, KeyEventArgs e)
@@ -62,11 +61,6 @@ namespace Graph
                     _isChoosingConnectingSourceKeyIsPressed = false;
                     break;
             }
-        }
-
-        private void DrawForm_SizeChanged(object sender, System.EventArgs e)
-        {
-            _pointViewer.Invalidate();
         }
 
         private void DrawForm_MouseClick(object sender, MouseEventArgs e)

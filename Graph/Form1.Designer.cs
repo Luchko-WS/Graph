@@ -35,7 +35,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(827, 563);
+            this.ClientSize = new System.Drawing.Size(743, 385);
             this.Name = "DrawForm";
             this.Text = "PaintForm";
             this.ResumeLayout(false);
@@ -43,8 +43,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel _drawPanel;
     }
 }
 
