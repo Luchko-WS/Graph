@@ -5,7 +5,7 @@ namespace Graph
 {
     public partial class DrawForm : Form
     {
-        GraphVertexesRepository _repository;
+        GraphElementsRepository _repository;
         Viewer _pointViewer;
         bool _isDrawingKeyIsPressed = false;
         bool _isConnectingKeyIsPressed = false;
@@ -14,7 +14,7 @@ namespace Graph
         public DrawForm()
         {
             InitializeComponent();
-            _repository = new GraphVertexesRepository();
+            _repository = new GraphElementsRepository();
             _pointViewer = new Viewer(this, _repository)
             {
                 SaveProportions = true
@@ -42,7 +42,7 @@ namespace Graph
                     _isChoosingConnectingSourceKeyIsPressed = true;
                     break;
                 case Keys.Delete:
-                    _repository.RemoveSelectedVertexes();
+                    _repository.RemoveSelectedItems();
                     break;
             }
         }
@@ -73,7 +73,7 @@ namespace Graph
                 }
                 else if(_isConnectingKeyIsPressed)
                 {
-                    _repository.ConnectVertexWith(e.X, e.Y);
+                    _repository.CreateEdge(e.X, e.Y);
                 }
                 else if(_isChoosingConnectingSourceKeyIsPressed)
                 {

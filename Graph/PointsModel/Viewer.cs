@@ -8,21 +8,21 @@ namespace Graph.PointsModel
     {
         private readonly Form _graphicForm;
         private Graphics _graphics;
-        private readonly GraphVertexesRepository _repository;
+        private readonly GraphElementsRepository _repository;
 
         //brushes
-        private readonly static Color _backgroundLayoutColor = Color.White;
-        private readonly static Color _backgroundOutsideColor = Color.DarkGray;
-        private readonly SolidBrush _backgroundBrush = new SolidBrush(_backgroundLayoutColor);
-        private readonly SolidBrush _simpleVertexBrush = new SolidBrush(Color.Black);
-        private readonly SolidBrush _selectedVertexBrush = new SolidBrush(Color.Red);
-        private readonly SolidBrush _connectingVertexroundBrush = new SolidBrush(Color.Green);
+        private static Color _backgroundLayoutColor = Color.White;
+        private static Color _backgroundOutsideColor = Color.DarkGray;
+        private SolidBrush _backgroundBrush = new SolidBrush(_backgroundLayoutColor);
+        private SolidBrush _simpleVertexBrush = new SolidBrush(Color.Black);
+        private SolidBrush _selectedVertexBrush = new SolidBrush(Color.Red);
+        private SolidBrush _connectingVertexroundBrush = new SolidBrush(Color.Green);
 
         private bool _saveProportions;
         private int _fixedHeight;
         private int _fixedWidth;
 
-        public Viewer(Form form, GraphVertexesRepository repository)
+        public Viewer(Form form, GraphElementsRepository repository)
         {
             _graphicForm = form;
             _graphicForm.BackColor = _backgroundOutsideColor;
@@ -31,16 +31,17 @@ namespace Graph.PointsModel
 
             _repository = repository;
 
-            _graphicForm.Shown += _graphicForm_Shown; ;
+            _graphicForm.Shown += _graphicForm_Shown;
             _graphicForm.ResizeEnd += _graphicControl_ResizeEnd;
 
-            _repository.OnDrawVertex += _repository_DrawVertex;
+            _repository.OnCreateVertex += _repository_DrawVertex;
             _repository.SelectedVertexes.CollectionChanged += SelectedVertexes_CollectionChanged;
             _repository.SelectedEdges.CollectionChanged += SelectedEdges_CollectionChanged;
             _repository.OnRemoveVertex += _repository_OnRemoveVertex;
-            _repository.OnVertexesConnected += _repository_OnVertexesConnected;
+            _repository.OnRemoveEdge += _repository_OnRemoveEdge;
             _repository.OnSettingSourceVertex += _repository_OnSettingSourceVertex;
             _repository.OnRemovingSourceVertex += _repository_OnRemovingSourceVertex;
+            _repository.OnCreateEdge += _repository_OnCreateEdge;
         }
 
         private void _graphicForm_Shown(object sender, System.EventArgs e)
@@ -154,7 +155,12 @@ namespace Graph.PointsModel
             }
         }
 
-        private void _repository_OnVertexesConnected(GraphVertex x, GraphVertex y)
+        private void _repository_OnRemoveEdge(GraphEdge edge)
+        {
+            DrawEdge(edge.Vertex1, edge.Vertex2, new SolidBrush(_backgroundLayoutColor));
+        }
+
+        private void _repository_OnCreateEdge(GraphVertex x, GraphVertex y)
         {
             DrawEdge(x, y, Brushes.Black);
         }
@@ -187,9 +193,6 @@ namespace Graph.PointsModel
                         DrawSimpleVertex(vertex);
                     }
                     break;
-                case NotifyCollectionChangedAction.Reset:
-                    Invalidate();
-                    break;
             }
         }
 
@@ -210,9 +213,6 @@ namespace Graph.PointsModel
                         var edge = (GraphEdge)item;
                         DrawEdge(edge.Vertex1, edge.Vertex2, new SolidBrush(Color.Black));
                     }
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    Invalidate();
                     break;
             }
         }

@@ -5,9 +5,10 @@ using System.Linq;
 namespace Graph.PointsModel
 {
     public delegate void VertexArg(GraphVertex vertex);
+    public delegate void EdgeArg(GraphEdge edge);
     public delegate void VertexPairArg(GraphVertex x, GraphVertex y);
 
-    public class GraphVertexesRepository
+    public class GraphElementsRepository
     {
         private HashSet<GraphVertex> _vertexesSet = new HashSet<GraphVertex>();
         private ObservableCollection<GraphVertex> _selectedVertexes = new ObservableCollection<GraphVertex>();
@@ -16,11 +17,12 @@ namespace Graph.PointsModel
         private HashSet<GraphEdge> _edgesSet = new HashSet<GraphEdge>();
         private ObservableCollection<GraphEdge> _selectedEdges = new ObservableCollection<GraphEdge>();
 
-        public event VertexArg OnDrawVertex;
+        public event VertexArg OnCreateVertex;
         public event VertexArg OnRemoveVertex;
         public event VertexArg OnSettingSourceVertex;
         public event VertexArg OnRemovingSourceVertex;
-        public event VertexPairArg OnVertexesConnected;
+        public event VertexPairArg OnCreateEdge;
+        public event EdgeArg OnRemoveEdge;
 
         public IEnumerable<GraphVertex> Vertexes
         {
@@ -72,7 +74,7 @@ namespace Graph.PointsModel
             if (!_vertexesSet.Contains(newVertex))
             {
                 _vertexesSet.Add(newVertex);
-                var handler = OnDrawVertex;
+                var handler = OnCreateVertex;
                 if (handler != null)
                 {
                     handler.Invoke(newVertex);
@@ -158,25 +160,25 @@ namespace Graph.PointsModel
                 _connectingVertex = null;
             }
 
-            foreach (var item in _selectedVertexes)
+            foreach (var vertex in _selectedVertexes)
             {
-                foreach (var relVertex in item.RelativeVertexes)
+                foreach (var relVertex in vertex.RelativeVertexes)
                 {
-                    relVertex.RelativeVertexes.Remove(item);
+                    relVertex.RelativeVertexes.Remove(vertex);
                 }
-                _vertexesSet.Remove(item);
+                _vertexesSet.Remove(vertex);
 
                 var handler = OnRemoveVertex;
                 if (handler != null)
                 {
-                    handler.Invoke(item);
+                    handler.Invoke(vertex);
                 }
             }
 
             _selectedVertexes.Clear();
         }
 
-        public void ConnectVertexWith(int x, int y)
+        public void CreateEdge(int x, int y)
         {
             if (_connectingVertex != null)
             {
@@ -187,13 +189,34 @@ namespace Graph.PointsModel
                     vertex.RelativeVertexes.Add(_connectingVertex);
                     _edgesSet.Add(new GraphEdge(_connectingVertex, vertex));
 
-                    var handler = OnVertexesConnected;
+                    var handler = OnCreateEdge;
                     if (handler != null)
                     {
                         handler.Invoke(_connectingVertex, vertex);
                     }
                 }
             }
+        }
+
+        public void RemoveSelectedEdges()
+        {
+            foreach (var edge in _selectedEdges)
+            {
+                _edgesSet.Remove(edge);
+
+                var handler = OnRemoveEdge;
+                if (handler != null)
+                {
+                    handler.Invoke(edge);
+                }
+            }
+            _selectedEdges.Clear();
+        }
+
+        public void RemoveSelectedItems()
+        {
+            RemoveSelectedEdges();
+            RemoveSelectedVertexes();
         }
     }
 }
