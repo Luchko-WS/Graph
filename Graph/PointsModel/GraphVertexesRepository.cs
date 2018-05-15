@@ -37,6 +37,11 @@ namespace Graph.PointsModel
             get { return _connectingVertex; }
         }
 
+        public ObservableCollection<GraphEdge> SelectedEdges
+        {
+            get { return _selectedEdges; }
+        }
+
         public void SetConnectingVertex(int x, int y)
         {
             if(_connectingVertex != null)
@@ -73,6 +78,19 @@ namespace Graph.PointsModel
                     handler.Invoke(newVertex);
                 }
             }
+        }
+
+        public bool SelectElement(int x, int y)
+        {
+            if(SelectVertex(x, y))
+            {
+                return true;
+            }
+            if(SelectEdge(x, y))
+            {
+                return true;
+            }
+            return false;
         }
 
         public bool SelectVertex(int x, int y)
@@ -121,7 +139,16 @@ namespace Graph.PointsModel
 
         public void ClearSelecting()
         {
-            _selectedVertexes.Clear();
+            var count = _selectedVertexes.Count;
+            for (var i = 0; i < count; i++)
+            {
+                _selectedVertexes.RemoveAt(0);
+            }
+            count = _selectedEdges.Count;
+            for (var i = 0; i < count; i++)
+            {
+                _selectedEdges.RemoveAt(0);
+            }
         }
 
         public void RemoveSelectedVertexes()
@@ -158,6 +185,8 @@ namespace Graph.PointsModel
                 {
                     _connectingVertex.RelativeVertexes.Add(vertex);
                     vertex.RelativeVertexes.Add(_connectingVertex);
+                    _edgesSet.Add(new GraphEdge(_connectingVertex, vertex));
+
                     var handler = OnVertexesConnected;
                     if (handler != null)
                     {

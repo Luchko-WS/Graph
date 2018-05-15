@@ -81,7 +81,7 @@ namespace Graph
                 }
                 else
                 {
-                    _repository.SelectVertex(e.X, e.Y);
+                    _repository.SelectElement(e.X, e.Y);
                 }
             }
         }

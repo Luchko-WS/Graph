@@ -35,7 +35,8 @@ namespace Graph.PointsModel
             _graphicForm.ResizeEnd += _graphicControl_ResizeEnd;
 
             _repository.OnDrawVertex += _repository_DrawVertex;
-            _repository.SelectedVertexes.CollectionChanged += SelectedPoints_CollectionChanged;
+            _repository.SelectedVertexes.CollectionChanged += SelectedVertexes_CollectionChanged;
+            _repository.SelectedEdges.CollectionChanged += SelectedEdges_CollectionChanged;
             _repository.OnRemoveVertex += _repository_OnRemoveVertex;
             _repository.OnVertexesConnected += _repository_OnVertexesConnected;
             _repository.OnSettingSourceVertex += _repository_OnSettingSourceVertex;
@@ -98,15 +99,17 @@ namespace Graph.PointsModel
             _graphics = _graphicForm.CreateGraphics();
             _graphics.Clear(_backgroundLayoutColor);
 
-            //begin
-            foreach (var vertex in _repository.Vertexes)
+            if (_saveProportions)
             {
-                if (_saveProportions)
+                foreach (var vertex in _repository.Vertexes)
                 {
                     var newX = (int)((double)vertex.ClientRectangle.Location.X / _fixedWidth * _graphicForm.Width);
                     var newY = (int)((double)vertex.ClientRectangle.Location.Y / _fixedHeight * _graphicForm.Height);
                     vertex.ChangeLocation(newX, newY);
                 }
+
+                _fixedWidth = _graphicForm.Width;
+                _fixedHeight = _graphicForm.Height;
             }
 
             foreach (var vertex in _repository.Vertexes)
@@ -130,10 +133,6 @@ namespace Graph.PointsModel
             {
                 DrawConnectingVertex(_repository.СonnectingVertex);
             }
-            //end
-
-            _fixedWidth = _graphicForm.Width;
-            _fixedHeight = _graphicForm.Height;
         }
 
         private void _graphicControl_ResizeEnd(object sender, System.EventArgs e)
@@ -170,7 +169,7 @@ namespace Graph.PointsModel
             DrawSimpleVertex(vertex);
         }
 
-        private void SelectedPoints_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void SelectedVertexes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -186,6 +185,30 @@ namespace Graph.PointsModel
                     {
                         var vertex = (GraphVertex)item;
                         DrawSimpleVertex(vertex);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    Invalidate();
+                    break;
+            }
+        }
+
+        private void SelectedEdges_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var item in e.NewItems)
+                    {
+                        var edge = (GraphEdge)item;
+                        DrawEdge(edge.Vertex1, edge.Vertex2, new SolidBrush(Color.Red));
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (var item in e.OldItems)
+                    {
+                        var edge = (GraphEdge)item;
+                        DrawEdge(edge.Vertex1, edge.Vertex2, new SolidBrush(Color.Black));
                     }
                     break;
                 case NotifyCollectionChangedAction.Reset:
