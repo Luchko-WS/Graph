@@ -1,4 +1,5 @@
-﻿using Graph.PointsModel;
+﻿using Graph.Model;
+using Graph.ViewModel;
 using System.Windows.Forms;
 
 namespace Graph

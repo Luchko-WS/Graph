@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Graph.Model.Elements;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Graph.PointsModel
+namespace Graph.Model
 {
     public delegate void VertexArg(GraphVertex vertex);
     public delegate void EdgeArg(GraphEdge edge);

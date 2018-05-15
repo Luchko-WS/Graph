@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 
-namespace Graph.PointsModel
+namespace Graph.Model.Elements
 {
     public class GraphVertex : ISelectableGraphElement<GraphVertex>
     {

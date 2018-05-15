@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Graph.PointsModel
+namespace Graph.Model.Elements
 {
     interface ISelectableGraphElement<T> : IEqualityComparer<T>
     {

@@ -1,4 +1,4 @@
-﻿namespace Graph.PointsModel
+﻿namespace Graph.Model.Elements
 {
     public class GraphEdge : ISelectableGraphElement<GraphEdge>
     {

@@ -1,8 +1,10 @@
-﻿using System.Collections.Specialized;
+﻿using Graph.Model;
+using Graph.Model.Elements;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Graph.PointsModel
+namespace Graph.ViewModel
 {
     public class Viewer
     {
