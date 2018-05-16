@@ -1,5 +1,4 @@
 ﻿using Graph.Model.Elements;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -11,23 +10,19 @@ namespace Graph.Model
 
     public class GraphElementsRepository
     {
-        private HashSet<GraphVertex> _vertexesSet = new HashSet<GraphVertex>();
+        private ObservableCollection<GraphVertex> _vertexes = new ObservableCollection<GraphVertex>();
         private ObservableCollection<GraphVertex> _selectedVertexes = new ObservableCollection<GraphVertex>();
         private GraphVertex _connectingVertex;
 
-        private HashSet<GraphEdge> _edgesSet = new HashSet<GraphEdge>();
+        private ObservableCollection<GraphEdge> _edges = new ObservableCollection<GraphEdge>();
         private ObservableCollection<GraphEdge> _selectedEdges = new ObservableCollection<GraphEdge>();
 
-        public event VertexArg OnCreateVertex;
-        public event VertexArg OnRemoveVertex;
         public event VertexArg OnSettingSourceVertex;
         public event VertexArg OnRemovingSourceVertex;
-        public event VertexPairArg OnCreateEdge;
-        public event EdgeArg OnRemoveEdge;
 
-        public IEnumerable<GraphVertex> Vertexes
+        public ObservableCollection<GraphVertex> Vertexes
         {
-            get { return _vertexesSet; }
+            get { return _vertexes; }
         }
 
         public ObservableCollection<GraphVertex> SelectedVertexes
@@ -38,6 +33,11 @@ namespace Graph.Model
         public GraphVertex СonnectingVertex
         {
             get { return _connectingVertex; }
+        }
+
+        public ObservableCollection<GraphEdge> Edges
+        {
+            get { return _edges; }
         }
 
         public ObservableCollection<GraphEdge> SelectedEdges
@@ -56,7 +56,7 @@ namespace Graph.Model
                 }
             }
 
-            var vertex = _vertexesSet.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
+            var vertex = _vertexes.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
             if (vertex != null)
             {
                 _connectingVertex = vertex;
@@ -72,14 +72,9 @@ namespace Graph.Model
         public void CreateVertex(int x, int y)
         {
             var newVertex = new GraphVertex(x, y);
-            if (!_vertexesSet.Contains(newVertex))
+            if (!_vertexes.Contains(newVertex))
             {
-                _vertexesSet.Add(newVertex);
-                var handler = OnCreateVertex;
-                if (handler != null)
-                {
-                    handler.Invoke(newVertex);
-                }
+                _vertexes.Add(newVertex);
             }
         }
 
@@ -98,7 +93,7 @@ namespace Graph.Model
 
         public bool SelectVertex(int x, int y)
         {
-            var vertex = _vertexesSet.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
+            var vertex = _vertexes.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
             if (vertex != null)
             {
                 var oldVertex = _selectedVertexes.FirstOrDefault(v => v.Equals(vertex));
@@ -120,7 +115,7 @@ namespace Graph.Model
 
         public bool SelectEdge(int x, int y)
         {
-            var edge = _edgesSet.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
+            var edge = _edges.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
             if (edge != null)
             {
                 var oldEdge = _selectedEdges.FirstOrDefault(v => v.Equals(edge));
@@ -161,21 +156,21 @@ namespace Graph.Model
                 _connectingVertex = null;
             }
 
-            foreach (var vertex in _selectedVertexes)
+            foreach (var vertexToRemove in _selectedVertexes)
             {
-                foreach (var relVertex in vertex.RelativeVertexes)
+                foreach (var relVertex in vertexToRemove.RelativeVertexes)
                 {
-                    relVertex.RelativeVertexes.Remove(vertex);
+                    relVertex.RelativeVertexes.Remove(vertexToRemove);
                 }
-                _vertexesSet.Remove(vertex);
 
-                var handler = OnRemoveVertex;
-                if (handler != null)
+                var edgesToRemove = _edges.Where(e => e.Vertex1.Equals(vertexToRemove) || e.Vertex2.Equals(vertexToRemove)).ToList();
+                for(var i = 0; i < edgesToRemove.Count; i++)
                 {
-                    handler.Invoke(vertex);
+                    _edges.Remove(edgesToRemove[i]);
                 }
+
+                _vertexes.Remove(vertexToRemove);
             }
-
             _selectedVertexes.Clear();
         }
 
@@ -183,17 +178,16 @@ namespace Graph.Model
         {
             if (_connectingVertex != null)
             {
-                var vertex = _vertexesSet.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
+                var vertex = _vertexes.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
                 if(vertex != null)
                 {
                     _connectingVertex.RelativeVertexes.Add(vertex);
                     vertex.RelativeVertexes.Add(_connectingVertex);
-                    _edgesSet.Add(new GraphEdge(_connectingVertex, vertex));
 
-                    var handler = OnCreateEdge;
-                    if (handler != null)
+                    var newEdge = new GraphEdge(_connectingVertex, vertex);
+                    if (!_edges.Contains(newEdge))
                     {
-                        handler.Invoke(_connectingVertex, vertex);
+                        _edges.Add(new GraphEdge(_connectingVertex, vertex));
                     }
                 }
             }
@@ -203,21 +197,15 @@ namespace Graph.Model
         {
             foreach (var edge in _selectedEdges)
             {
-                _edgesSet.Remove(edge);
-
-                var handler = OnRemoveEdge;
-                if (handler != null)
-                {
-                    handler.Invoke(edge);
-                }
+                _edges.Remove(edge);
             }
             _selectedEdges.Clear();
         }
 
         public void RemoveSelectedItems()
         {
-            RemoveSelectedEdges();
             RemoveSelectedVertexes();
+            RemoveSelectedEdges();          
         }
     }
 }

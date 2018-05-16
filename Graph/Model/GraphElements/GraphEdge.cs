@@ -62,7 +62,7 @@
                 rightX = _vertex1.ClientRectangle.Left;
             }
 
-            return (y >= topY && y <= bottonY) && (x > leftX && x < rightX);
+            return (y >= topY + 1 && y <= bottonY - 1) && (x > leftX && x < rightX);
         }
     }
 }
