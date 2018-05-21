@@ -69,6 +69,12 @@ namespace Graph.Model.Elements
 
             if(leftVertex.ClientRectangle.Y > rightVertex.ClientRectangle.Y)
             {
+                if (x < leftVertex.ClientRectangle.Left &&
+                   x > rightVertex.ClientRectangle.Right &&
+                   y > leftVertex.ClientRectangle.Bottom &&
+                   y < rightVertex.ClientRectangle.Top)
+                    return false;
+
                 return IsInPoly(x, y, new List<Point>
                 {
                     new Point(leftVertex.ClientRectangle.Left, leftVertex.ClientRectangle.Top),
@@ -79,6 +85,12 @@ namespace Graph.Model.Elements
             }
             else
             {
+                if (x < rightVertex.ClientRectangle.Left &&
+                   x > leftVertex.ClientRectangle.Right &&
+                   y > rightVertex.ClientRectangle.Bottom &&
+                   y < leftVertex.ClientRectangle.Top)
+                    return false;
+
                 return IsInPoly(x, y, new List<Point>
                 {
                     new Point(leftVertex.ClientRectangle.Right, leftVertex.ClientRectangle.Top),
