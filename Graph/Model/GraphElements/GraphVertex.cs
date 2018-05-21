@@ -6,7 +6,7 @@ namespace Graph.Model.Elements
     public class GraphVertex : ISelectableGraphElement<GraphVertex>
     {
         private Rectangle _clientRectangle;
-        private int _diameter = 10;
+        private static readonly int _diameter = 12;
         private HashSet<GraphVertex> _relativeVertexes;
 
         public GraphVertex(int x, int y)
@@ -18,6 +18,11 @@ namespace Graph.Model.Elements
         public Rectangle ClientRectangle
         {
             get { return _clientRectangle; }
+        }
+
+        public static int Diameter
+        {
+            get { return _diameter; }
         }
 
         public HashSet<GraphVertex> RelativeVertexes

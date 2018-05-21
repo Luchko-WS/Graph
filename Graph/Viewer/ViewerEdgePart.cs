@@ -17,7 +17,7 @@ namespace Graph.ViewModel
             {
                 Point A = x.GetCentreOfClientRectangle();
                 Point B = y.GetCentreOfClientRectangle();
-                _graphics.DrawLine(new Pen(brush, 4), A, B);
+                _graphics.DrawLine(new Pen(brush, (int)(GraphVertex.Diameter * GraphEdge.WidthCoef)), A, B);
 
                 DrawVertexByState(x);
                 DrawVertexByState(y);

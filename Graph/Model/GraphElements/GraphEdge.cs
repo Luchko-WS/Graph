@@ -1,10 +1,14 @@
-﻿namespace Graph.Model.Elements
+﻿using System.Collections.Generic;
+using System.Drawing;
+
+namespace Graph.Model.Elements
 {
     public class GraphEdge : ISelectableGraphElement<GraphEdge>
     {
         private readonly GraphVertex _vertex1;
         private readonly GraphVertex _vertex2;
         private bool _hasDirection;
+        private static readonly double _widthCoef = 0.6;
 
         public GraphEdge(GraphVertex vertex1, GraphVertex vertex2) : this(vertex1, vertex2, false) { }
 
@@ -23,6 +27,11 @@
         public GraphVertex Vertex2
         {
             get { return _vertex2; }
+        }
+
+        public static double WidthCoef
+        {
+            get { return _widthCoef; }
         }
 
         public bool Equals(GraphEdge x, GraphEdge y)
@@ -45,24 +54,65 @@
 
         public bool IsContainsPoint(int x, int y)
         {
-            var topY = ((double)((x - _vertex1.ClientRectangle.Left) * (_vertex2.ClientRectangle.Top - _vertex1.ClientRectangle.Top)) 
-                / (_vertex2.ClientRectangle.Left - _vertex1.ClientRectangle.Left)) + _vertex1.ClientRectangle.Top;
-            var bottonY = ((double)((x - _vertex1.ClientRectangle.Right) * (_vertex2.ClientRectangle.Bottom - _vertex1.ClientRectangle.Bottom))
-                / (_vertex2.ClientRectangle.Right - _vertex1.ClientRectangle.Right)) + _vertex1.ClientRectangle.Bottom;
+            GraphVertex leftVertex, rightVertex;
 
-            int leftX, rightX;
-            if (_vertex1.ClientRectangle.X < _vertex2.ClientRectangle.X)
+            if(_vertex1.ClientRectangle.X < _vertex2.ClientRectangle.X)
             {
-                leftX = _vertex1.ClientRectangle.Right;
-                rightX = _vertex2.ClientRectangle.Left;
+                leftVertex = _vertex1;
+                rightVertex = _vertex2;
             }
             else
             {
-                leftX = _vertex2.ClientRectangle.Right;
-                rightX = _vertex1.ClientRectangle.Left;
+                leftVertex = _vertex2;
+                rightVertex = _vertex1;
             }
 
-            return (y >= topY + 1 && y <= bottonY - 1) && (x > leftX && x < rightX);
+            if(leftVertex.ClientRectangle.Y > rightVertex.ClientRectangle.Y)
+            {
+                return IsInPoly(x, y, new List<Point>
+                {
+                    new Point(leftVertex.ClientRectangle.Left, leftVertex.ClientRectangle.Top),
+                    new Point(leftVertex.ClientRectangle.Right, leftVertex.ClientRectangle.Bottom),
+                    new Point(rightVertex.ClientRectangle.Left, rightVertex.ClientRectangle.Top),
+                    new Point(rightVertex.ClientRectangle.Right, rightVertex.ClientRectangle.Bottom)
+                });
+            }
+            else
+            {
+                return IsInPoly(x, y, new List<Point>
+                {
+                    new Point(leftVertex.ClientRectangle.Right, leftVertex.ClientRectangle.Top),
+                    new Point(leftVertex.ClientRectangle.Left, leftVertex.ClientRectangle.Bottom),
+                    new Point(rightVertex.ClientRectangle.Right, rightVertex.ClientRectangle.Top),
+                    new Point(rightVertex.ClientRectangle.Left, rightVertex.ClientRectangle.Bottom)
+                });
+            }
+        }
+
+        private bool IsInPoly(int x, int y, ICollection<Point> points)
+        {
+            var npol = points.Count;
+            List<int> xp = new List<int>();
+            List<int> yp = new List<int>();
+
+            foreach(var point in points)
+            {
+                xp.Add(point.X);
+                yp.Add(point.Y);
+            }
+
+            var j = npol - 1;
+            bool c = false;
+            for (var i = 0; i < npol; i++)
+            {
+                if ((((yp[i] <= y) && (y < yp[j])) || ((yp[j] <= y) && (y < yp[i]))) &&
+                    (x > (xp[j] - xp[i]) * (y - yp[i]) / (yp[j] - yp[i]) + xp[i]))
+                {
+                    c = !c;
+                }
+                j = i;
+            }
+            return c;
         }
     }
 }
