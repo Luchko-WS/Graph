@@ -56,27 +56,6 @@ namespace Graph.ViewModel
             DrawEdge(x, y, _selectedEdgeBrush);
         }
 
-        private void SelectedEdges_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (var item in e.NewItems)
-                    {
-                        var edge = (GraphEdge)item;
-                        DrawSelectedEdge(edge);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (var item in e.OldItems)
-                    {
-                        var edge = (GraphEdge)item;
-                        DrawSimpleEdge(edge);
-                    }
-                    break;
-            }
-        }
-
         private void _repository_OnAddEdge(GraphEdge edge)
         {
             DrawSimpleEdge(edge);
@@ -85,6 +64,22 @@ namespace Graph.ViewModel
         private void _repository_OnRemoveEdges(ICollection<GraphEdge> edgeCollection)
         {
             Invalidate();
+        }
+
+        private void _repository_OnEdgesSelected(ICollection<GraphEdge> edgeCollection)
+        {
+            foreach (var edge in edgeCollection)
+            {
+                DrawSelectedEdge(edge);
+            }
+        }
+
+        private void _repository_OnClearSelectedEdges(ICollection<GraphEdge> edgeCollection)
+        {
+            foreach (var edge in edgeCollection)
+            {
+                DrawSimpleEdge(edge);
+            }
         }
     }
 }

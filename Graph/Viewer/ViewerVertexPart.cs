@@ -61,34 +61,6 @@ namespace Graph.ViewModel
             DrawSimpleVertex(vertex);
         }
 
-        private void SelectedVertexes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (var item in e.NewItems)
-                    {
-                        var vertex = (GraphVertex)item;
-                        DrawSelectedVertex(vertex);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (var item in e.OldItems)
-                    {
-                        var vertex = (GraphVertex)item;
-                        if (vertex != _repository.СonnectingVertex)
-                        {
-                            DrawSimpleVertex(vertex);
-                        }
-                        else
-                        {
-                            DrawConnectingVertex(vertex);
-                        }
-                    }
-                    break;
-            }
-        }
-
         private void _repository_OnAddVertex(GraphVertex vertex)
         {
             DrawSimpleVertex(vertex);
@@ -97,6 +69,29 @@ namespace Graph.ViewModel
         private void _repository_OnRemoveVertexes(ICollection<GraphVertex> vertexCollection)
         {
             Invalidate();
+        }
+
+        private void _repository_OnVertexesSelected(ICollection<GraphVertex> vertexCollection)
+        {
+            foreach (var vertex in vertexCollection)
+            {
+                DrawSelectedVertex(vertex);
+            }
+        }
+
+        private void _repository_OnClearSelectedVertexes(System.Collections.Generic.ICollection<Model.Elements.GraphVertex> vertexCollection)
+        {
+            foreach (var vertex in vertexCollection)
+            {
+                if (vertex != _repository.СonnectingVertex)
+                {
+                    DrawSimpleVertex(vertex);
+                }
+                else
+                {
+                    DrawConnectingVertex(vertex);
+                }
+            }
         }
     }
 }

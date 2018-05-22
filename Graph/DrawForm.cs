@@ -11,6 +11,7 @@ namespace Graph
         bool _isDrawingKeyIsPressed = false;
         bool _isConnectingKeyIsPressed = false;
         bool _isChoosingConnectingSourceKeyIsPressed = false;
+        bool _isCtrlKeyIsPressed = false;
 
         public DrawForm()
         {
@@ -45,6 +46,9 @@ namespace Graph
                 case Keys.Delete:
                     _repository.RemoveSelectedItems();
                     break;
+                case Keys.ControlKey:
+                    _isCtrlKeyIsPressed = true;
+                    break;
             }
         }
 
@@ -60,6 +64,9 @@ namespace Graph
                     break;
                 case Keys.S:
                     _isChoosingConnectingSourceKeyIsPressed = false;
+                    break;
+                case Keys.ControlKey:
+                    _isCtrlKeyIsPressed = false;
                     break;
             }
         }
@@ -82,7 +89,14 @@ namespace Graph
                 }
                 else
                 {
-                    _repository.SelectElement(e.X, e.Y);
+                    if (_isCtrlKeyIsPressed)
+                    {
+                        _repository.SelectElement(e.X, e.Y, multipleSelection: true);
+                    }
+                    else
+                    {
+                        _repository.SelectElement(e.X, e.Y, multipleSelection: false);
+                    }
                 }
             }
         }

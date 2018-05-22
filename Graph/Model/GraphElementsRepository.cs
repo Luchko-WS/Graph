@@ -15,15 +15,18 @@ namespace Graph.Model
     public class GraphElementsRepository
     {
         private List<GraphVertex> _vertexes = new List<GraphVertex>();
-        private ObservableCollection<GraphVertex> _selectedVertexes = new ObservableCollection<GraphVertex>();
+        private List<GraphVertex> _selectedVertexes = new List<GraphVertex>();
         private GraphVertex _connectingVertex;
 
         private List<GraphEdge> _edges = new List<GraphEdge>();
-        private ObservableCollection<GraphEdge> _selectedEdges = new ObservableCollection<GraphEdge>();
+        private List<GraphEdge> _selectedEdges = new List<GraphEdge>();
 
         public event VertexArg OnSettingSourceVertex;
         public event VertexArg OnRemovingSourceVertex;
-
+        public event VertexCollectionArg OnVertexesSelected;
+        public event VertexCollectionArg OnClearSelectedVertexes;
+        public event EdgeCollectionArg OnEdgesSelected;
+        public event EdgeCollectionArg OnClearSelectedEdges;
         public event VertexArg OnAddVertex;
         public event VertexCollectionArg OnRemoveVertexes;
         public event EdgeArg OnAddEdge;
@@ -34,7 +37,7 @@ namespace Graph.Model
             get { return _vertexes; }
         }
 
-        public ObservableCollection<GraphVertex> SelectedVertexes
+        public List<GraphVertex> SelectedVertexes
         {
             get { return _selectedVertexes; }
         }
@@ -49,7 +52,7 @@ namespace Graph.Model
             get { return _edges; }
         }
 
-        public ObservableCollection<GraphEdge> SelectedEdges
+        public List<GraphEdge> SelectedEdges
         {
             get { return _selectedEdges; }
         }
@@ -92,33 +95,52 @@ namespace Graph.Model
             }
         }
 
-        public bool SelectElement(int x, int y)
+        public bool SelectElement(int x, int y, bool multipleSelection)
         {
-            if(SelectVertex(x, y))
+            if(!multipleSelection)
+            {
+                ClearSelecting();
+            }
+
+            if(SelectVertex(x, y, multipleSelection))
             {
                 return true;
             }
-            if(SelectEdge(x, y))
+            if(SelectEdge(x, y, multipleSelection))
             {
                 return true;
             }
             return false;
         }
 
-        public bool SelectVertex(int x, int y)
+        public bool SelectVertex(int x, int y, bool multipleSelection)
         {
             var vertex = _vertexes.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
             if (vertex != null)
             {
-                var oldVertex = _selectedVertexes.FirstOrDefault(v => v.Equals(vertex));
-                if (oldVertex != null)
+                if (multipleSelection)
                 {
-                    _selectedVertexes.Remove(oldVertex);
+                    var oldVertex = _selectedVertexes.FirstOrDefault(v => v.Equals(vertex));
+                    if (oldVertex != null)
+                    {
+                        _selectedVertexes.Remove(oldVertex);
+
+                        var handler = OnClearSelectedVertexes;
+                        if (handler != null)
+                        {
+                            handler.Invoke(new List<GraphVertex>() { oldVertex });
+                        }
+
+                        return true;
+                    }
                 }
-                else
+                _selectedVertexes.Add(vertex);
+                var handle = OnVertexesSelected;
+                if (handle != null)
                 {
-                    _selectedVertexes.Add(vertex);
+                    handle.Invoke(new List<GraphVertex>() { vertex });
                 }
+
                 return true;
             }
             else
@@ -127,20 +149,35 @@ namespace Graph.Model
             }
         }
 
-        public bool SelectEdge(int x, int y)
+        public bool SelectEdge(int x, int y, bool multipleSelection)
         {
             var edge = _edges.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
             if (edge != null)
             {
-                var oldEdge = _selectedEdges.FirstOrDefault(v => v.Equals(edge));
-                if (oldEdge != null)
+                if (multipleSelection)
                 {
-                    _selectedEdges.Remove(oldEdge);
+                    var oldEdge = _selectedEdges.FirstOrDefault(v => v.Equals(edge));
+                    if (oldEdge != null)
+                    {
+                        _selectedEdges.Remove(oldEdge);
+
+                        var handler = OnClearSelectedEdges;
+                        if (handler != null)
+                        {
+                            handler.Invoke(new List<GraphEdge>() { oldEdge });
+                        }
+
+                        return true;
+                    }
                 }
-                else
+                
+                _selectedEdges.Add(edge);
+                var handle = OnEdgesSelected;
+                if (handle != null)
                 {
-                    _selectedEdges.Add(edge);
+                    handle.Invoke(new List<GraphEdge>() { edge });
                 }
+
                 return true;
             }
             else
@@ -151,15 +188,24 @@ namespace Graph.Model
 
         public void ClearSelecting()
         {
-            var count = _selectedVertexes.Count;
-            for (var i = 0; i < count; i++)
+            if (_selectedVertexes.Any())
             {
-                _selectedVertexes.RemoveAt(0);
+                var clsVertexesHandler = OnClearSelectedVertexes;
+                if (clsVertexesHandler != null)
+                {
+                    clsVertexesHandler.Invoke(_selectedVertexes);
+                }
+                _selectedVertexes.Clear();
             }
-            count = _selectedEdges.Count;
-            for (var i = 0; i < count; i++)
+
+            if (_selectedEdges.Any())
             {
-                _selectedEdges.RemoveAt(0);
+                var clsEdgesHandler = OnClearSelectedEdges;
+                if (clsEdgesHandler != null)
+                {
+                    clsEdgesHandler.Invoke(_selectedEdges);
+                }
+                _selectedEdges.Clear();
             }
         }
 

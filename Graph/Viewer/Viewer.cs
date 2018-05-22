@@ -41,12 +41,14 @@ namespace Graph.ViewModel
 
             _repository.OnAddVertex += _repository_OnAddVertex;
             _repository.OnRemoveVertexes += _repository_OnRemoveVertexes;
-            _repository.SelectedVertexes.CollectionChanged += SelectedVertexes_CollectionChanged;
-
             _repository.OnAddEdge += _repository_OnAddEdge;
             _repository.OnRemoveEdges += _repository_OnRemoveEdges;
-            _repository.SelectedEdges.CollectionChanged += SelectedEdges_CollectionChanged;
-            
+
+            _repository.OnVertexesSelected += _repository_OnVertexesSelected;
+            _repository.OnClearSelectedVertexes += _repository_OnClearSelectedVertexes;
+            _repository.OnEdgesSelected += _repository_OnEdgesSelected;
+            _repository.OnClearSelectedEdges += _repository_OnClearSelectedEdges;
+
             _repository.OnSettingSourceVertex += _repository_OnSettingSourceVertex;
             _repository.OnRemovingSourceVertex += _repository_OnRemovingSourceVertex;
         }
