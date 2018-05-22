@@ -8,12 +8,12 @@ namespace Graph.Common
 {
     static class EventHelper
     {
-        public static void Invoke(object sender, EventHandler handler)
+        public static void Invoke<T>(EventHandler<T> handler, object sender)
         {
-            Invoke(sender, handler, null);
+            Invoke(handler, sender, default(T));
         }
 
-        public static void Invoke(object sender, EventHandler handler, EventArgs args)
+        public static void Invoke<T>(EventHandler<T> handler, object sender, T args)
         {
             var h = handler;
             if(h != null)

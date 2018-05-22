@@ -1,4 +1,5 @@
-﻿using Graph.Model.Elements;
+﻿using Graph.Common.GraphElementsRepositoryEventArgs;
+using Graph.Model.Elements;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
@@ -51,37 +52,37 @@ namespace Graph.ViewModel
             }
         }
 
-        private void _repository_OnSettingSourceVertex(GraphVertex vertex)
+        private void _repository_OnSettingSourceVertex(object sender, GraphVertexEventArgs e)
         {
-            DrawConnectingVertex(vertex);
+            DrawConnectingVertex(e.Vertex);
         }
 
-        private void _repository_OnRemovingSourceVertex(GraphVertex vertex)
+        private void _repository_OnRemovingSourceVertex(object sender, GraphVertexEventArgs e)
         {
-            DrawSimpleVertex(vertex);
+            DrawSimpleVertex(e.Vertex);
         }
 
-        private void _repository_OnAddVertex(GraphVertex vertex)
+        private void _repository_OnAddVertex(object sender, GraphVertexEventArgs e)
         {
-            DrawSimpleVertex(vertex);
+            DrawSimpleVertex(e.Vertex);
         }
 
-        private void _repository_OnRemoveVertexes(ICollection<GraphVertex> vertexCollection)
+        private void _repository_OnRemoveVertexes(object sender, GraphVertexCollectionEventArgs e)
         {
             Invalidate();
         }
 
-        private void _repository_OnVertexesSelected(ICollection<GraphVertex> vertexCollection)
+        private void _repository_OnVertexesSelected(object sender, GraphVertexCollectionEventArgs e)
         {
-            foreach (var vertex in vertexCollection)
+            foreach (var vertex in e.Vertexes)
             {
                 DrawSelectedVertex(vertex);
             }
         }
 
-        private void _repository_OnClearSelectedVertexes(System.Collections.Generic.ICollection<Model.Elements.GraphVertex> vertexCollection)
+        private void _repository_OnClearSelectedVertexes(object sender, GraphVertexCollectionEventArgs e)
         {
-            foreach (var vertex in vertexCollection)
+            foreach (var vertex in e.Vertexes)
             {
                 if (vertex != _repository.СonnectingVertex)
                 {

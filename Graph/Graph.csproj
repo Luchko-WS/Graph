@@ -52,6 +52,7 @@
     <Compile Include="DrawForm.Designer.cs">
       <DependentUpon>DrawForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\GraphElementsRepositoryEventArgs.cs" />
     <Compile Include="Model\GraphElements\GraphEdge.cs" />
     <Compile Include="Model\GraphElements\GraphVertex.cs" />
     <Compile Include="Model\GraphElementsRepository.cs" />

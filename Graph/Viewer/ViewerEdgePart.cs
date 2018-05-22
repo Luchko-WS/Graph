@@ -1,4 +1,5 @@
-﻿using Graph.Model.Elements;
+﻿using Graph.Common.GraphElementsRepositoryEventArgs;
+using Graph.Model.Elements;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
@@ -56,27 +57,27 @@ namespace Graph.ViewModel
             DrawEdge(x, y, _selectedEdgeBrush);
         }
 
-        private void _repository_OnAddEdge(GraphEdge edge)
+        private void _repository_OnAddEdge(object sender, GraphEdgeEventArgs e)
         {
-            DrawSimpleEdge(edge);
+            DrawSimpleEdge(e.Edge);
         }
 
-        private void _repository_OnRemoveEdges(ICollection<GraphEdge> edgeCollection)
+        private void _repository_OnRemoveEdges(object sender, GraphEdgeCollectionEventArgs e)
         {
             Invalidate();
         }
 
-        private void _repository_OnEdgesSelected(ICollection<GraphEdge> edgeCollection)
+        private void _repository_OnEdgesSelected(object sender, GraphEdgeCollectionEventArgs e)
         {
-            foreach (var edge in edgeCollection)
+            foreach (var edge in e.Edges)
             {
                 DrawSelectedEdge(edge);
             }
         }
 
-        private void _repository_OnClearSelectedEdges(ICollection<GraphEdge> edgeCollection)
+        private void _repository_OnClearSelectedEdges(object sender, GraphEdgeCollectionEventArgs e)
         {
-            foreach (var edge in edgeCollection)
+            foreach (var edge in e.Edges)
             {
                 DrawSimpleEdge(edge);
             }
