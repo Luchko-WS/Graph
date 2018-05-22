@@ -32,14 +32,11 @@ namespace Graph
             switch (e.KeyCode)
             {
                 case Keys.A:
-                    if(_isCtrlKeyIsPressed)
+                    if (_isCtrlKeyIsPressed)
                     {
                         _repository.SelectAll();
                     }
                     _isDrawingKeyIsPressed = true;
-                    break;
-                case Keys.C:
-                    _repository.ClearSelecting();
                     break;
                 case Keys.R:
                     _isConnectingKeyIsPressed = true;
@@ -83,11 +80,11 @@ namespace Graph
                 {
                     _repository.CreateVertex(e.X, e.Y);
                 }
-                else if(_isConnectingKeyIsPressed)
+                else if (_isConnectingKeyIsPressed)
                 {
                     _repository.CreateEdge(e.X, e.Y);
                 }
-                else if(_isChoosingConnectingSourceKeyIsPressed)
+                else if (_isChoosingConnectingSourceKeyIsPressed)
                 {
                     _repository.SetConnectingVertex(e.X, e.Y);
                 }

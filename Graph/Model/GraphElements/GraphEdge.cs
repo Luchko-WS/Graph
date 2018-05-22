@@ -64,7 +64,7 @@ namespace Graph.Model.Elements
             var p3 = edge._vertex1.GetCentreOfClientRectangle();
             var p4 = edge._vertex2.GetCentreOfClientRectangle();
             //Шаг 2. Если x1 ≥ x2 то  меняем между собой значения x1 и  x2  и y1 и  y2 
-            if(p1.X >= p2.X)
+            if (p1.X >= p2.X)
             {
                 var tmp = p1;
                 p1 = p2;
@@ -103,14 +103,14 @@ namespace Graph.Model.Elements
             /*Шаг 9.Учтем, что точка пересечения прямых может лежать вне отрезков, принадлежащих этим прямым. Таким образом, если отрезки пересекаются, то, поскольку x1 ≤ x2; x3 ≤ x4; 
             должны выполняться условия: x1 ≤ x4 и x4 ≤ x2 или x1 ≤ x3 и x3 ≤ x2 
             Если одно из двух условий верно, то отрезки имеют точку пересечения, иначе - отрезки не пересекаются. */
-            return (p1.X<=p4.X && p4.X <= p2.X) || (p1.X<=p3.X && p3.X <= p2.X);
+            return (p1.X <= p4.X && p4.X <= p2.X) || (p1.X <= p3.X && p3.X <= p2.X);
         }
 
         public bool IsContainsPoint(int x, int y)
         {
             GraphVertex leftVertex, rightVertex;
 
-            if(_vertex1.ClientRectangle.X < _vertex2.ClientRectangle.X)
+            if (_vertex1.ClientRectangle.X < _vertex2.ClientRectangle.X)
             {
                 leftVertex = _vertex1;
                 rightVertex = _vertex2;
@@ -127,7 +127,7 @@ namespace Graph.Model.Elements
              *   /  /
              *  [  ]
              */
-            if(leftVertex.ClientRectangle.Y > rightVertex.ClientRectangle.Y)
+            if (leftVertex.ClientRectangle.Y > rightVertex.ClientRectangle.Y)
             {
                 if (x < leftVertex.ClientRectangle.Left &&
                    x > rightVertex.ClientRectangle.Right &&
@@ -173,7 +173,7 @@ namespace Graph.Model.Elements
             List<int> xp = new List<int>();
             List<int> yp = new List<int>();
 
-            foreach(var point in points)
+            foreach (var point in points)
             {
                 xp.Add(point.X);
                 yp.Add(point.Y);

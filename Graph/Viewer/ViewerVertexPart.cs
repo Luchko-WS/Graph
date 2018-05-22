@@ -1,7 +1,5 @@
 ﻿using Graph.Common.GraphElementsRepositoryEventArgs;
 using Graph.Model.Elements;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Drawing;
 
 namespace Graph.ViewModel

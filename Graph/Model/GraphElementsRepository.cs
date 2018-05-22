@@ -1,11 +1,9 @@
-﻿using Graph.Model.Elements;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Graph.Common;
+﻿using Graph.Common;
 using Graph.Common.GraphElementsRepositoryEventArgs;
+using Graph.Model.Elements;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Graph.Model
 {
@@ -56,9 +54,9 @@ namespace Graph.Model
 
         public void SetConnectingVertex(int x, int y)
         {
-            if(_connectingVertex != null)
+            if (_connectingVertex != null)
             {
-                EventHelper.Invoke(OnRemovingSourceVertex, this, 
+                EventHelper.Invoke(OnRemovingSourceVertex, this,
                     new GraphVertexEventArgs() { Vertex = _connectingVertex });
             }
 
@@ -66,7 +64,7 @@ namespace Graph.Model
             if (vertex != null)
             {
                 _connectingVertex = vertex;
-                EventHelper.Invoke(OnSettingSourceVertex, this, 
+                EventHelper.Invoke(OnSettingSourceVertex, this,
                     new GraphVertexEventArgs() { Vertex = _connectingVertex });
             }
         }
@@ -77,24 +75,24 @@ namespace Graph.Model
             if (!_vertexes.Contains(newVertex))
             {
                 _vertexes.Add(newVertex);
-                EventHelper.Invoke(OnAddVertex, this, 
+                EventHelper.Invoke(OnAddVertex, this,
                     new GraphVertexEventArgs() { Vertex = newVertex });
             }
         }
 
         public bool SelectElement(int x, int y, bool multipleSelection)
         {
-            if(!multipleSelection)
+            if (!multipleSelection)
             {
                 ClearSelecting();
             }
 
-            if(SelectVertex(x, y, multipleSelection))
+            if (SelectVertex(x, y, multipleSelection))
             {
                 return true;
             }
 
-            if(SelectEdge(x, y, multipleSelection))
+            if (SelectEdge(x, y, multipleSelection))
             {
                 return true;
             }
@@ -113,14 +111,14 @@ namespace Graph.Model
                     if (oldVertex != null)
                     {
                         _selectedVertexes.Remove(oldVertex);
-                        EventHelper.Invoke(OnClearSelectedVertexes, this, 
+                        EventHelper.Invoke(OnClearSelectedVertexes, this,
                             new GraphVertexCollectionEventArgs() { Vertexes = new List<GraphVertex>() { oldVertex } });
                         return true;
                     }
                 }
 
                 _selectedVertexes.Add(vertex);
-                EventHelper.Invoke(OnVertexesSelected, this, 
+                EventHelper.Invoke(OnVertexesSelected, this,
                     new GraphVertexCollectionEventArgs() { Vertexes = new List<GraphVertex>() { vertex } });
                 return true;
             }
@@ -141,14 +139,14 @@ namespace Graph.Model
                     if (oldEdge != null)
                     {
                         _selectedEdges.Remove(oldEdge);
-                        EventHelper.Invoke(OnClearSelectedEdges, this, 
+                        EventHelper.Invoke(OnClearSelectedEdges, this,
                             new GraphEdgeCollectionEventArgs() { Edges = new List<GraphEdge>() { oldEdge } });
                         return true;
                     }
                 }
-                
+
                 _selectedEdges.Add(edge);
-                EventHelper.Invoke(OnEdgesSelected, this, 
+                EventHelper.Invoke(OnEdgesSelected, this,
                     new GraphEdgeCollectionEventArgs() { Edges = new List<GraphEdge>() { edge } });
                 return true;
             }
@@ -178,14 +176,14 @@ namespace Graph.Model
         {
             if (_selectedVertexes.Any())
             {
-                EventHelper.Invoke(OnClearSelectedVertexes, this, 
+                EventHelper.Invoke(OnClearSelectedVertexes, this,
                     new GraphVertexCollectionEventArgs() { Vertexes = _selectedVertexes });
                 _selectedVertexes.Clear();
             }
 
             if (_selectedEdges.Any())
             {
-                EventHelper.Invoke(OnClearSelectedEdges, this, 
+                EventHelper.Invoke(OnClearSelectedEdges, this,
                     new GraphEdgeCollectionEventArgs() { Edges = _selectedEdges });
                 _selectedEdges.Clear();
             }
@@ -210,7 +208,7 @@ namespace Graph.Model
                     }
                     edgesToRemove.AddRange(_edges
                         .Where(e => e.Vertex1.Equals(vertexToRemove) || e.Vertex2.Equals(vertexToRemove))
-                        .ToList());   
+                        .ToList());
                 }
 
                 if (edgesToRemove.Any())
@@ -220,15 +218,15 @@ namespace Graph.Model
                     {
                         _edges.Remove(edgesToRemove[i]);
                     }
-                    EventHelper.Invoke(OnRemoveEdges, this, 
+                    EventHelper.Invoke(OnRemoveEdges, this,
                         new GraphEdgeCollectionEventArgs() { Edges = edgesToRemove });
                 }
 
-                foreach(var vertex in _selectedVertexes)
+                foreach (var vertex in _selectedVertexes)
                 {
                     _vertexes.Remove(vertex);
                 }
-                EventHelper.Invoke(OnRemoveVertexes, this, 
+                EventHelper.Invoke(OnRemoveVertexes, this,
                     new GraphVertexCollectionEventArgs() { Vertexes = _selectedVertexes });
                 _selectedVertexes.Clear();
             }
@@ -239,7 +237,7 @@ namespace Graph.Model
             if (_connectingVertex != null)
             {
                 var vertex = _vertexes.Where(v => v.IsContainsPoint(x, y)).FirstOrDefault();
-                if(vertex != null)
+                if (vertex != null)
                 {
                     _connectingVertex.RelativeVertexes.Add(vertex);
                     vertex.RelativeVertexes.Add(_connectingVertex);
@@ -248,7 +246,7 @@ namespace Graph.Model
                     if (!_edges.Contains(newEdge))
                     {
                         _edges.Add(newEdge);
-                        EventHelper.Invoke(OnAddEdge, this, 
+                        EventHelper.Invoke(OnAddEdge, this,
                             new GraphEdgeEventArgs() { Edge = newEdge });
                     }
                 }
@@ -264,7 +262,7 @@ namespace Graph.Model
                     _edges.Remove(edge);
                 }
 
-                EventHelper.Invoke(OnRemoveEdges, this, 
+                EventHelper.Invoke(OnRemoveEdges, this,
                     new GraphEdgeCollectionEventArgs() { Edges = _selectedEdges });
                 _selectedEdges.Clear();
             }
@@ -273,7 +271,7 @@ namespace Graph.Model
         public void RemoveSelectedItems()
         {
             RemoveSelectedVertexes();
-            RemoveSelectedEdges();          
+            RemoveSelectedEdges();
         }
     }
 }
