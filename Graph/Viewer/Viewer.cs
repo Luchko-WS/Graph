@@ -37,12 +37,16 @@ namespace Graph.ViewModel
             _repository = repository;
 
             _graphicForm.Shown += _graphicForm_Shown;
-            _graphicForm.ResizeEnd += _graphicControl_ResizeEnd;
+            _graphicForm.ResizeEnd += _graphicForm_ResizeEnd;
 
-            _repository.Vertexes.CollectionChanged += Vertexes_CollectionChanged;
+            _repository.OnAddVertex += _repository_OnAddVertex;
+            _repository.OnRemoveVertexes += _repository_OnRemoveVertexes;
             _repository.SelectedVertexes.CollectionChanged += SelectedVertexes_CollectionChanged;
-            _repository.Edges.CollectionChanged += Edges_CollectionChanged;
+
+            _repository.OnAddEdge += _repository_OnAddEdge;
+            _repository.OnRemoveEdges += _repository_OnRemoveEdges;
             _repository.SelectedEdges.CollectionChanged += SelectedEdges_CollectionChanged;
+            
             _repository.OnSettingSourceVertex += _repository_OnSettingSourceVertex;
             _repository.OnRemovingSourceVertex += _repository_OnRemovingSourceVertex;
         }
@@ -59,7 +63,7 @@ namespace Graph.ViewModel
             set { _saveProportions = value; }
         }
 
-        private void _graphicControl_ResizeEnd(object sender, System.EventArgs e)
+        private void _graphicForm_ResizeEnd(object sender, System.EventArgs e)
         {
             Invalidate();
         }

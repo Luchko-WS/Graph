@@ -1,6 +1,8 @@
 ﻿using Graph.Model.Elements;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Linq;
 
 namespace Graph.ViewModel
 {
@@ -54,27 +56,6 @@ namespace Graph.ViewModel
             DrawEdge(x, y, _selectedEdgeBrush);
         }
 
-        private void Edges_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (var item in e.NewItems)
-                    {
-                        var edge = (GraphEdge)item;
-                        DrawSimpleEdge(edge);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (var item in e.OldItems)
-                    {
-                        var edge = (GraphEdge)item;
-                        ClearEdge(edge);
-                    }
-                    break;
-            }
-        }
-
         private void SelectedEdges_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -94,6 +75,16 @@ namespace Graph.ViewModel
                     }
                     break;
             }
+        }
+
+        private void _repository_OnAddEdge(GraphEdge edge)
+        {
+            DrawSimpleEdge(edge);
+        }
+
+        private void _repository_OnRemoveEdges(ICollection<GraphEdge> edgeCollection)
+        {
+            Invalidate();
         }
     }
 }

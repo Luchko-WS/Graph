@@ -1,4 +1,5 @@
 ﻿using Graph.Model.Elements;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
 
@@ -60,27 +61,6 @@ namespace Graph.ViewModel
             DrawSimpleVertex(vertex);
         }
 
-        private void Vertexes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (var item in e.NewItems)
-                    {
-                        var vertex = (GraphVertex)item;
-                        DrawSimpleVertex(vertex);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (var item in e.OldItems)
-                    {
-                        var vertex = (GraphVertex)item;
-                        ClearVertex(vertex);
-                    }
-                    break;
-            }
-        }
-
         private void SelectedVertexes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -107,6 +87,16 @@ namespace Graph.ViewModel
                     }
                     break;
             }
+        }
+
+        private void _repository_OnAddVertex(GraphVertex vertex)
+        {
+            DrawSimpleVertex(vertex);
+        }
+
+        private void _repository_OnRemoveVertexes(ICollection<GraphVertex> vertexCollection)
+        {
+            Invalidate();
         }
     }
 }

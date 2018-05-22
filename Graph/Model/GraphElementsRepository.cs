@@ -1,26 +1,35 @@
 ﻿using Graph.Model.Elements;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Graph.Model
 {
     public delegate void VertexArg(GraphVertex vertex);
+    public delegate void VertexCollectionArg(ICollection<GraphVertex> vertexCollection);
     public delegate void EdgeArg(GraphEdge edge);
+    public delegate void EdgeCollectionArg(ICollection<GraphEdge> edgeCollection);
     public delegate void VertexPairArg(GraphVertex x, GraphVertex y);
 
     public class GraphElementsRepository
     {
-        private ObservableCollection<GraphVertex> _vertexes = new ObservableCollection<GraphVertex>();
+        private List<GraphVertex> _vertexes = new List<GraphVertex>();
         private ObservableCollection<GraphVertex> _selectedVertexes = new ObservableCollection<GraphVertex>();
         private GraphVertex _connectingVertex;
 
-        private ObservableCollection<GraphEdge> _edges = new ObservableCollection<GraphEdge>();
+        private List<GraphEdge> _edges = new List<GraphEdge>();
         private ObservableCollection<GraphEdge> _selectedEdges = new ObservableCollection<GraphEdge>();
 
         public event VertexArg OnSettingSourceVertex;
         public event VertexArg OnRemovingSourceVertex;
 
-        public ObservableCollection<GraphVertex> Vertexes
+        public event VertexArg OnAddVertex;
+        public event VertexCollectionArg OnRemoveVertexes;
+        public event EdgeArg OnAddEdge;
+        public event EdgeCollectionArg OnRemoveEdges;
+
+        public List<GraphVertex> Vertexes
         {
             get { return _vertexes; }
         }
@@ -35,7 +44,7 @@ namespace Graph.Model
             get { return _connectingVertex; }
         }
 
-        public ObservableCollection<GraphEdge> Edges
+        public List<GraphEdge> Edges
         {
             get { return _edges; }
         }
@@ -75,6 +84,11 @@ namespace Graph.Model
             if (!_vertexes.Contains(newVertex))
             {
                 _vertexes.Add(newVertex);
+                var addHandler = OnAddVertex;
+                if (addHandler != null)
+                {
+                    addHandler.Invoke(newVertex);
+                }
             }
         }
 
@@ -151,27 +165,52 @@ namespace Graph.Model
 
         public void RemoveSelectedVertexes()
         {
-            if(_selectedVertexes.Contains(_connectingVertex))
+            if (_selectedVertexes.Any())
             {
-                _connectingVertex = null;
-            }
-
-            foreach (var vertexToRemove in _selectedVertexes)
-            {
-                foreach (var relVertex in vertexToRemove.RelativeVertexes)
+                if (_selectedVertexes.Contains(_connectingVertex))
                 {
-                    relVertex.RelativeVertexes.Remove(vertexToRemove);
+                    _connectingVertex = null;
                 }
 
-                var edgesToRemove = _edges.Where(e => e.Vertex1.Equals(vertexToRemove) || e.Vertex2.Equals(vertexToRemove)).ToList();
-                for(var i = 0; i < edgesToRemove.Count; i++)
+                List<GraphEdge> edgesToRemove = new List<GraphEdge>();
+
+                foreach (var vertexToRemove in _selectedVertexes)
                 {
-                    _edges.Remove(edgesToRemove[i]);
+                    foreach (var relVertex in vertexToRemove.RelativeVertexes)
+                    {
+                        relVertex.RelativeVertexes.Remove(vertexToRemove);
+                    }
+                    edgesToRemove.AddRange(_edges.Where(e => e.Vertex1.Equals(vertexToRemove) || e.Vertex2.Equals(vertexToRemove)).ToList());   
                 }
 
-                _vertexes.Remove(vertexToRemove);
+                if (edgesToRemove.Any())
+                {
+                    edgesToRemove = edgesToRemove.Distinct().ToList();
+                    for (var i = 0; i < edgesToRemove.Count; i++)
+                    {
+                        _edges.Remove(edgesToRemove[i]);
+                    }
+
+                    var rmEdgesHandler = OnRemoveEdges;
+                    if (rmEdgesHandler != null)
+                    {
+                        rmEdgesHandler.Invoke(edgesToRemove);
+                    }
+                }
+
+                foreach(var vertex in _selectedVertexes)
+                {
+                    _vertexes.Remove(vertex);
+                }
+
+                var rmHandler = OnRemoveVertexes;
+                if (rmHandler != null)
+                {
+                    rmHandler.Invoke(_selectedVertexes);
+                }
+
+                _selectedVertexes.Clear();
             }
-            _selectedVertexes.Clear();
         }
 
         public void CreateEdge(int x, int y)
@@ -187,7 +226,12 @@ namespace Graph.Model
                     var newEdge = new GraphEdge(_connectingVertex, vertex);
                     if (!_edges.Contains(newEdge))
                     {
-                        _edges.Add(new GraphEdge(_connectingVertex, vertex));
+                        _edges.Add(newEdge);
+                        var addHandler = OnAddEdge;
+                        if (addHandler != null)
+                        {
+                            addHandler.Invoke(newEdge);
+                        }
                     }
                 }
             }
@@ -195,11 +239,20 @@ namespace Graph.Model
 
         public void RemoveSelectedEdges()
         {
-            foreach (var edge in _selectedEdges)
+            if (_selectedEdges.Any())
             {
-                _edges.Remove(edge);
+                foreach (var edge in _selectedEdges)
+                {
+                    _edges.Remove(edge);
+                }
+
+                var rmHandler = OnRemoveEdges;
+                if (rmHandler != null)
+                {
+                    rmHandler.Invoke(_selectedEdges);
+                }
+                _selectedEdges.Clear();
             }
-            _selectedEdges.Clear();
         }
 
         public void RemoveSelectedItems()
