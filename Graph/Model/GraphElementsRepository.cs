@@ -158,6 +158,22 @@ namespace Graph.Model
             }
         }
 
+        public void SelectAll()
+        {
+            if (_vertexes.Any())
+            {
+                _selectedVertexes = new List<GraphVertex>(_vertexes);
+                EventHelper.Invoke(OnVertexesSelected, this,
+                        new GraphVertexCollectionEventArgs() { Vertexes = _selectedVertexes });
+            }
+            if (_edges.Any())
+            {
+                _selectedEdges = new List<GraphEdge>(_edges);
+                EventHelper.Invoke(OnEdgesSelected, this,
+                        new GraphEdgeCollectionEventArgs() { Edges = _edges });
+            }
+        }
+
         public void ClearSelecting()
         {
             if (_selectedVertexes.Any())

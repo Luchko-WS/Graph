@@ -32,6 +32,10 @@ namespace Graph
             switch (e.KeyCode)
             {
                 case Keys.A:
+                    if(_isCtrlKeyIsPressed)
+                    {
+                        _repository.SelectAll();
+                    }
                     _isDrawingKeyIsPressed = true;
                     break;
                 case Keys.C:

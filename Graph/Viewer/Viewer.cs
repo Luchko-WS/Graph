@@ -107,18 +107,20 @@ namespace Graph.ViewModel
             //draw vertex again (look in DrawEdge method)
             foreach (var vertex in _repository.Vertexes)
             {
-                if (vertex != _repository.СonnectingVertex)
+                if (_repository.SelectedVertexes.Contains(vertex))
                 {
                     DrawSelectedVertex(vertex);
                 }
-
-                if (_repository.SelectedVertexes.Contains(vertex))
-                {
-                    DrawConnectingVertex(_repository.СonnectingVertex);
-                }
                 else
                 {
-                    DrawSimpleVertex(vertex);
+                    if (vertex == _repository.СonnectingVertex)
+                    {
+                        DrawConnectingVertex(_repository.СonnectingVertex);
+                    }
+                    else
+                    {
+                        DrawSimpleVertex(vertex);
+                    }
                 }
             }
         }
