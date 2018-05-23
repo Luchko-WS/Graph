@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Graph.Model.Elements
 {
-    interface ISelectableGraphElement<T> : IEqualityComparer<T>
+    interface ISelectableGraphElement<T> : IEquatable<T>
     {
         bool IsContainsPoint(int x, int y);
     }

@@ -41,10 +41,10 @@ namespace Graph.Model.Elements
             return _clientRectangle.Contains(x, y);
         }
 
-        public bool Equals(GraphVertex x, GraphVertex y)
+        public bool Equals(GraphVertex other)
         {
-            return x._clientRectangle.X.Equals(y._clientRectangle.X) &&
-                x._clientRectangle.Y.Equals(y._clientRectangle.Y);
+            return _clientRectangle.X.Equals(other._clientRectangle.X) &&
+                _clientRectangle.Y.Equals(other._clientRectangle.Y);
         }
 
         public int GetHashCode(GraphVertex obj)

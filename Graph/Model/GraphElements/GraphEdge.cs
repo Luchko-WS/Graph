@@ -54,16 +54,10 @@ namespace Graph.Model.Elements
             get { return _widthCoef; }
         }
 
-        public bool Equals(GraphEdge x, GraphEdge y)
+        public bool Equals(GraphEdge other)
         {
-            return ((x._vertex1.ClientRectangle.X == y._vertex1.ClientRectangle.X &&
-                   x._vertex1.ClientRectangle.Y == y._vertex1.ClientRectangle.Y &&
-                   x._vertex2.ClientRectangle.X == y._vertex2.ClientRectangle.X &&
-                   x._vertex2.ClientRectangle.X == y._vertex2.ClientRectangle.X) ||
-                   (x._vertex1.ClientRectangle.X == y._vertex2.ClientRectangle.X &&
-                   x._vertex1.ClientRectangle.Y == y._vertex2.ClientRectangle.Y &&
-                   x._vertex2.ClientRectangle.X == y._vertex1.ClientRectangle.X &&
-                   x._vertex2.ClientRectangle.X == y._vertex1.ClientRectangle.X));
+           return (_vertex1.Equals(other._vertex1)) && (_vertex2.Equals(other._vertex2)) ||
+                (_vertex1.Equals(other._vertex2)) && (_vertex2.Equals(other._vertex1));
         }
 
         public int GetHashCode(GraphEdge obj)

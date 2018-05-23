@@ -329,7 +329,12 @@ namespace Graph.Model
                             .Any(v => v.Equals(e.Vertex1)) || sourceVertexes.Any(v => v.Equals(e.Vertex2)))
                         .ToList();
 
-            relEdges = relEdges.Distinct().ToList();
+            foreach(var edgeToRemove in relEdges)
+            {
+                _edges.Remove(edgeToRemove);
+            }
+
+            //create new edges
             foreach(var relEdge in relEdges)
             {
                 if (sourceVertexes.Any(v => v.Equals(relEdge.Vertex1)))
@@ -341,6 +346,8 @@ namespace Graph.Model
                     relEdge.Vertex2 = newVertex;
                 }
             }
+            relEdges = relEdges.Distinct().ToList();
+            _edges.AddRange(relEdges);
 
             _vertexes.Add(newVertex);
             _selectedVertexes.Clear();
