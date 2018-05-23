@@ -24,8 +24,10 @@ namespace Graph.Model
         public event EventHandler<GraphEdgeCollectionEventArgs> OnClearSelectedEdges;
         public event EventHandler<GraphVertexEventArgs> OnAddVertex;
         public event EventHandler<GraphVertexCollectionEventArgs> OnRemoveVertexes;
+        public event EventHandler<GraphVertexCollectionEventArgs> OnVertexesLocationChanged;
         public event EventHandler<GraphEdgeEventArgs> OnAddEdge;
         public event EventHandler<GraphEdgeCollectionEventArgs> OnRemoveEdges;
+        public event EventHandler<MergeGraphVertexesEventArgs> OnMergeVertexes;
 
         public List<GraphVertex> Vertexes
         {
@@ -66,6 +68,10 @@ namespace Graph.Model
                 _connectingVertex = vertex;
                 EventHelper.Invoke(OnSettingSourceVertex, this,
                     new GraphVertexEventArgs() { Vertex = _connectingVertex });
+            }
+            else
+            {
+                _connectingVertex = null;
             }
         }
 
@@ -272,6 +278,76 @@ namespace Graph.Model
         {
             RemoveSelectedVertexes();
             RemoveSelectedEdges();
+        }
+
+        public void MoveSelectedVertexes(int deltaX, int deltaY)
+        {
+            if (_selectedVertexes.Any())
+            {
+                foreach (var vertex in _selectedVertexes)
+                {
+                    int x = vertex.ClientRectangle.X + deltaX >= 0 ? vertex.ClientRectangle.X + deltaX : 0;
+                    int y = vertex.ClientRectangle.Y + deltaY >= 0 ? vertex.ClientRectangle.Y + deltaY : 0;
+                    vertex.ChangeLocation(x, y);
+                }
+                EventHelper.Invoke(OnVertexesLocationChanged, this,
+                    new GraphVertexCollectionEventArgs() { Vertexes = _selectedVertexes });
+            }
+        }
+
+        public void MergeSelectedVertexesIntoNewVertex(int x, int y)
+        {
+            _selectedEdges.Clear();
+            var sourceVertexes = new List<GraphVertex>(_selectedVertexes);
+
+            GraphVertex newVertex = new GraphVertex(x, y);
+
+            foreach (var vertex in sourceVertexes)
+            {
+                foreach (var relVertex in vertex.RelativeVertexes)
+                {
+                    newVertex.RelativeVertexes.Add(relVertex);
+                }
+            }
+
+            foreach (var vertexToRemove in sourceVertexes)
+            {
+                _vertexes.Remove(vertexToRemove);
+            }
+
+            var edgesToRemove = _edges
+                        .Where(e => sourceVertexes
+                            .Any(v => v.Equals(e.Vertex1)) && sourceVertexes.Any(v => v.Equals(e.Vertex2)))
+                        .ToList();
+            foreach(var edgeToRemove in edgesToRemove)
+            {
+                _edges.Remove(edgeToRemove);
+            }
+
+            var relEdges = _edges
+                        .Where(e => sourceVertexes
+                            .Any(v => v.Equals(e.Vertex1)) || sourceVertexes.Any(v => v.Equals(e.Vertex2)))
+                        .ToList();
+
+            relEdges = relEdges.Distinct().ToList();
+            foreach(var relEdge in relEdges)
+            {
+                if (sourceVertexes.Any(v => v.Equals(relEdge.Vertex1)))
+                {
+                    relEdge.Vertex1 = newVertex;
+                }
+                else
+                {
+                    relEdge.Vertex2 = newVertex;
+                }
+            }
+
+            _vertexes.Add(newVertex);
+            _selectedVertexes.Clear();
+            _selectedVertexes.Add(newVertex);
+
+            EventHelper.Invoke(OnMergeVertexes, this, 
+                new MergeGraphVertexesEventArgs() { NewVertex = newVertex, Source = sourceVertexes });
         }
     }
 }

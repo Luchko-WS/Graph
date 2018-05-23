@@ -5,8 +5,8 @@ namespace Graph.Model.Elements
 {
     public class GraphEdge : ISelectableGraphElement<GraphEdge>
     {
-        private readonly GraphVertex _vertex1;
-        private readonly GraphVertex _vertex2;
+        private GraphVertex _vertex1;
+        private GraphVertex _vertex2;
         private bool _hasDirection;
         private static readonly double _widthCoef = 0.6;
 
@@ -21,12 +21,32 @@ namespace Graph.Model.Elements
 
         public GraphVertex Vertex1
         {
-            get { return _vertex1; }
+            get
+            {
+                return _vertex1; 
+            }
+            set
+            {
+                if (value != null)
+                {
+                    _vertex1 = value;
+                }
+            }
         }
 
         public GraphVertex Vertex2
         {
-            get { return _vertex2; }
+            get
+            {
+                return _vertex2;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    _vertex2 = value;
+                }
+            }
         }
 
         public static double WidthCoef

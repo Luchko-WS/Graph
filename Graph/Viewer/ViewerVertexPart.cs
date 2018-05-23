@@ -92,5 +92,16 @@ namespace Graph.ViewModel
                 }
             }
         }
+
+        //CHANGE THIS!
+        private void _repository_OnVertexesLocationChanged(object sender, GraphVertexCollectionEventArgs e)
+        {
+            Invalidate();
+        }
+
+        private void _repository_OnMergeVertexes(object sender, MergeGraphVertexesEventArgs e)
+        {
+            Invalidate();
+        }
     }
 }

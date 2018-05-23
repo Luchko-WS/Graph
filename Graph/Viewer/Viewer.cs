@@ -51,6 +51,9 @@ namespace Graph.ViewModel
 
             _repository.OnSettingSourceVertex += _repository_OnSettingSourceVertex;
             _repository.OnRemovingSourceVertex += _repository_OnRemovingSourceVertex;
+
+            _repository.OnVertexesLocationChanged += _repository_OnVertexesLocationChanged;
+            _repository.OnMergeVertexes += _repository_OnMergeVertexes;
         }
 
         private void _graphicForm_Shown(object sender, System.EventArgs e)
@@ -67,15 +70,6 @@ namespace Graph.ViewModel
 
         private void _graphicForm_ResizeEnd(object sender, System.EventArgs e)
         {
-            Invalidate();
-        }
-
-        //need in optimization
-        public void Invalidate()
-        {
-            _graphics = _graphicForm.CreateGraphics();
-            _graphics.Clear(_backgroundLayoutColor);
-
             //update points
             if (_saveProportions)
             {
@@ -89,6 +83,14 @@ namespace Graph.ViewModel
                 _fixedWidth = _graphicForm.Width;
                 _fixedHeight = _graphicForm.Height;
             }
+            Invalidate();
+        }
+
+        //need in optimization
+        public void Invalidate()
+        {
+            _graphics = _graphicForm.CreateGraphics();
+            _graphics.Clear(_backgroundLayoutColor);
 
             //draw edges
             foreach (var edge in _repository.Edges)

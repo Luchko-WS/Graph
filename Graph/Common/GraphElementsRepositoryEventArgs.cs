@@ -29,4 +29,10 @@ namespace Graph.Common.GraphElementsRepositoryEventArgs
         public GraphVertex X { get; set; }
         public GraphVertex Y { get; set; }
     }
+
+    public class MergeGraphVertexesEventArgs : EventArgs
+    {
+        public ICollection<GraphVertex> Source { get; set; }
+        public GraphVertex NewVertex { get; set; }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Graph.Model;
 using Graph.ViewModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Graph
@@ -8,10 +9,13 @@ namespace Graph
     {
         GraphElementsRepository _repository;
         Viewer _pointViewer;
-        bool _isDrawingKeyIsPressed = false;
-        bool _isConnectingKeyIsPressed = false;
-        bool _isChoosingConnectingSourceKeyIsPressed = false;
-        bool _isCtrlKeyIsPressed = false;
+        bool _drawingKeyIsPressed = false;
+        bool _connectingKeyIsPressed = false;
+        bool _choosingConnectingSourceKeyIsPressed = false;
+        bool _ctrlKeyIsPressed = false;
+        bool _moveSelectedVertexesKeyIsPressed = false;
+        bool _mergeSelectedVertexesIntoVertexKeyIsPressed = false;
+        Point _savedMouseLocation;
 
         public DrawForm()
         {
@@ -22,9 +26,10 @@ namespace Graph
                 SaveProportions = true
             };
 
-            this.MouseClick += DrawForm_MouseClick;
             this.KeyDown += DrawForm_KeyDown;
             this.KeyUp += DrawForm_KeyUp;
+            this.MouseDown += DrawForm_MouseDown;
+            this.MouseUp += DrawForm_MouseUp;
         }
 
         private void DrawForm_KeyDown(object sender, KeyEventArgs e)
@@ -32,23 +37,29 @@ namespace Graph
             switch (e.KeyCode)
             {
                 case Keys.A:
-                    if (_isCtrlKeyIsPressed)
+                    if (_ctrlKeyIsPressed)
                     {
                         _repository.SelectAll();
                     }
-                    _isDrawingKeyIsPressed = true;
+                    _drawingKeyIsPressed = true;
                     break;
                 case Keys.R:
-                    _isConnectingKeyIsPressed = true;
+                    _connectingKeyIsPressed = true;
                     break;
                 case Keys.S:
-                    _isChoosingConnectingSourceKeyIsPressed = true;
+                    _choosingConnectingSourceKeyIsPressed = true;
                     break;
                 case Keys.Delete:
                     _repository.RemoveSelectedItems();
                     break;
                 case Keys.ControlKey:
-                    _isCtrlKeyIsPressed = true;
+                    _ctrlKeyIsPressed = true;
+                    break;
+                case Keys.M:
+                    _moveSelectedVertexesKeyIsPressed = true;
+                    break;
+                case Keys.U:
+                    _mergeSelectedVertexesIntoVertexKeyIsPressed = true;
                     break;
             }
         }
@@ -58,39 +69,53 @@ namespace Graph
             switch (e.KeyCode)
             {
                 case Keys.A:
-                    _isDrawingKeyIsPressed = false;
+                    _drawingKeyIsPressed = false;
                     break;
                 case Keys.R:
-                    _isConnectingKeyIsPressed = false;
+                    _connectingKeyIsPressed = false;
                     break;
                 case Keys.S:
-                    _isChoosingConnectingSourceKeyIsPressed = false;
+                    _choosingConnectingSourceKeyIsPressed = false;
                     break;
                 case Keys.ControlKey:
-                    _isCtrlKeyIsPressed = false;
+                    _ctrlKeyIsPressed = false;
+                    break;
+                case Keys.M:
+                    _moveSelectedVertexesKeyIsPressed = false;
+                    break;
+                case Keys.U:
+                    _mergeSelectedVertexesIntoVertexKeyIsPressed = false;
                     break;
             }
         }
 
-        private void DrawForm_MouseClick(object sender, MouseEventArgs e)
+        private void DrawForm_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (_isDrawingKeyIsPressed)
+                if (_drawingKeyIsPressed)
                 {
                     _repository.CreateVertex(e.X, e.Y);
                 }
-                else if (_isConnectingKeyIsPressed)
+                else if (_connectingKeyIsPressed)
                 {
                     _repository.CreateEdge(e.X, e.Y);
                 }
-                else if (_isChoosingConnectingSourceKeyIsPressed)
+                else if (_choosingConnectingSourceKeyIsPressed)
                 {
                     _repository.SetConnectingVertex(e.X, e.Y);
                 }
+                else if(_moveSelectedVertexesKeyIsPressed)
+                {
+                    _savedMouseLocation = e.Location;
+                }
+                else if(_mergeSelectedVertexesIntoVertexKeyIsPressed)
+                {
+                    _repository.MergeSelectedVertexesIntoNewVertex(e.X, e.Y);
+                }
                 else
                 {
-                    if (_isCtrlKeyIsPressed)
+                    if (_ctrlKeyIsPressed)
                     {
                         _repository.SelectElement(e.X, e.Y, multipleSelection: true);
                     }
@@ -98,6 +123,19 @@ namespace Graph
                     {
                         _repository.SelectElement(e.X, e.Y, multipleSelection: false);
                     }
+                }
+            }
+        }
+
+        private void DrawForm_MouseUp(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Left)
+            {
+                if(_moveSelectedVertexesKeyIsPressed)
+                {
+                    int deltaX = e.Location.X - _savedMouseLocation.X;
+                    int deltaY = e.Location.Y - _savedMouseLocation.Y;
+                    _repository.MoveSelectedVertexes(deltaX, deltaY);
                 }
             }
         }
