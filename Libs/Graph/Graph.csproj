@@ -49,9 +49,6 @@
     <Compile Include="Model\GraphElements\GraphVertex.cs" />
     <Compile Include="Model\GraphElements\ISelectableGraphElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Viewer\Viewer.cs" />
-    <Compile Include="Viewer\ViewerEdgePart.cs" />
-    <Compile Include="Viewer\ViewerVertexPart.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

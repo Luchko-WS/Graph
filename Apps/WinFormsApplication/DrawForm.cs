@@ -1,5 +1,5 @@
 ﻿using Graph.Model;
-using Graph.ViewModel;
+using GraphViewAdapters.WinForms;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,7 +8,7 @@ namespace WinFormsApplication
     public partial class DrawForm : Form
     {
         GraphElementsRepository _repository;
-        Viewer _pointViewer;
+        WinFormsViewAdapter _viewerAdapter;
         bool _drawingKeyIsPressed = false;
         bool _connectingKeyIsPressed = false;
         bool _choosingConnectingSourceKeyIsPressed = false;
@@ -21,7 +21,7 @@ namespace WinFormsApplication
         {
             InitializeComponent();
             _repository = new GraphElementsRepository();
-            _pointViewer = new Viewer(this, _repository)
+            _viewerAdapter = new WinFormsViewAdapter(this, _repository)
             {
                 SaveProportions = true
             };

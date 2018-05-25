@@ -2,9 +2,9 @@
 using Graph.Model.Elements;
 using System.Drawing;
 
-namespace Graph.ViewModel
+namespace GraphViewAdapters.WinForms
 {
-    public partial class Viewer
+    public partial class WinFormsViewAdapter
     {
         private void DrawVertex(GraphVertex vertex, Brush brush)
         {

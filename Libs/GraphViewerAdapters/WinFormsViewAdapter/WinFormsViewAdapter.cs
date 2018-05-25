@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Graph.ViewModel
+namespace GraphViewAdapters.WinForms
 {
-    public partial class Viewer
+    public partial class WinFormsViewAdapter
     {
         private readonly Form _graphicForm;
         private Graphics _graphics;
@@ -27,7 +27,7 @@ namespace Graph.ViewModel
         private int _fixedHeight;
         private int _fixedWidth;
 
-        public Viewer(Form form, GraphElementsRepository repository)
+        public WinFormsViewAdapter(Form form, GraphElementsRepository repository)
         {
             _graphicForm = form;
             _graphicForm.BackColor = _backgroundOutsideColor;

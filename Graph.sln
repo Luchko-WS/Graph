@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Libs\Graph\Graph.c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApplication", "Apps\WinFormsApplication\WinFormsApplication.csproj", "{350D80E5-210C-44DB-B524-C69A776FE023}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphViewAdapters", "Libs\GraphViewerAdapters\GraphViewAdapters.csproj", "{3EB1625C-F5E6-479D-AB68-0F7EB95B4E25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{E57CD8A9-EF1D-45CB-90F9-A2B2011F084F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{32BA20B1-03D2-4832-8242-C97D38EBC63A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,18 @@ Global
 		{350D80E5-210C-44DB-B524-C69A776FE023}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{350D80E5-210C-44DB-B524-C69A776FE023}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{350D80E5-210C-44DB-B524-C69A776FE023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EB1625C-F5E6-479D-AB68-0F7EB95B4E25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB1625C-F5E6-479D-AB68-0F7EB95B4E25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB1625C-F5E6-479D-AB68-0F7EB95B4E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB1625C-F5E6-479D-AB68-0F7EB95B4E25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{94CA4B4D-4272-4365-AE41-710ADCDDEDA1} = {E57CD8A9-EF1D-45CB-90F9-A2B2011F084F}
+		{350D80E5-210C-44DB-B524-C69A776FE023} = {32BA20B1-03D2-4832-8242-C97D38EBC63A}
+		{3EB1625C-F5E6-479D-AB68-0F7EB95B4E25} = {E57CD8A9-EF1D-45CB-90F9-A2B2011F084F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DD5EBE2-40BC-4E1C-BA0D-D42561287A32}

@@ -4,3 +4,9 @@ Graph/obj/
 Graph.v12.suo
 WinFormsApplication/obj/
 WinFormsApplication/bin/
+Libs/GraphViewerAdapters/bin/
+Libs/GraphViewerAdapters/obj/
+Apps/WinFormsApplication/obj/
+Apps/WinFormsApplication/bin/
+Libs/Graph/bin/
+Libs/Graph/obj/
