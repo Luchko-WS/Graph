@@ -36,11 +36,11 @@ namespace GraphViewAdapters.WinForms
 
         private void DrawVertexByState(GraphVertex vertex)
         {
-            if (_repository.SelectedVertexes.Contains(vertex))
+            if (_graphModel.SelectedVertexes.Contains(vertex))
             {
                 DrawSelectedVertex(vertex);
             }
-            else if (_repository.СonnectingVertex == vertex)
+            else if (_graphModel.СonnectingVertex == vertex)
             {
                 DrawConnectingVertex(vertex);
             }
@@ -82,7 +82,7 @@ namespace GraphViewAdapters.WinForms
         {
             foreach (var vertex in e.Vertexes)
             {
-                if (vertex != _repository.СonnectingVertex)
+                if (vertex != _graphModel.СonnectingVertex)
                 {
                     DrawSimpleVertex(vertex);
                 }

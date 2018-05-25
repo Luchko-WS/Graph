@@ -10,7 +10,7 @@ namespace Graph.Matrix
         private Dictionary<GraphVertex, int> _indexesMap;
         private int[,] _matrix;
 
-        public MatrixOfAdjacency(GraphElementsRepository graph)
+        public MatrixOfAdjacency(GraphModel graph)
         {
             _indexesMap = new Dictionary<GraphVertex, int>();
             int index = 0;

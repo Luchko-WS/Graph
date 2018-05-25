@@ -44,7 +44,7 @@
     <Compile Include="Common\EventHelper.cs" />
     <Compile Include="Common\GraphElementsRepositoryEventArgs.cs" />
     <Compile Include="Matrix\MatrixOfAdjacencyConverter.cs" />
-    <Compile Include="Model\GraphElementsRepository.cs" />
+    <Compile Include="Model\GraphModel.cs" />
     <Compile Include="Model\GraphElements\GraphEdge.cs" />
     <Compile Include="Model\GraphElements\GraphVertex.cs" />
     <Compile Include="Model\GraphElements\ISelectableGraphElement.cs" />

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Graph.Model
 {
-    public class GraphElementsRepository
+    public class GraphModel
     {
         private List<GraphVertex> _vertexes = new List<GraphVertex>();
         private List<GraphVertex> _selectedVertexes = new List<GraphVertex>();

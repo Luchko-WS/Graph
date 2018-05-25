@@ -47,9 +47,9 @@
     <Compile Include="WinFormsViewAdapter\WinFormsViewAdapterVertexPart.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Graph\Graph.csproj">
+    <ProjectReference Include="..\Graph\GraphModel.csproj">
       <Project>{94ca4b4d-4272-4365-ae41-710adcddeda1}</Project>
-      <Name>Graph</Name>
+      <Name>GraphModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

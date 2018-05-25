@@ -79,9 +79,9 @@
       <Project>{3eb1625c-f5e6-479d-ab68-0f7eb95b4e25}</Project>
       <Name>GraphViewAdapters</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libs\Graph\Graph.csproj">
+    <ProjectReference Include="..\..\Libs\Graph\GraphModel.csproj">
       <Project>{94ca4b4d-4272-4365-ae41-710adcddeda1}</Project>
-      <Name>Graph</Name>
+      <Name>GraphModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

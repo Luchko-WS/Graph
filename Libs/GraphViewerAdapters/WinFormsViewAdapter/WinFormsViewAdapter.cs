@@ -8,7 +8,7 @@ namespace GraphViewAdapters.WinForms
     {
         private readonly Form _graphicForm;
         private Graphics _graphics;
-        private readonly GraphElementsRepository _repository;
+        private readonly GraphModel _graphModel;
 
         //brushes
         //background
@@ -27,33 +27,33 @@ namespace GraphViewAdapters.WinForms
         private int _fixedHeight;
         private int _fixedWidth;
 
-        public WinFormsViewAdapter(Form form, GraphElementsRepository repository)
+        public WinFormsViewAdapter(Form form, GraphModel graphModel)
         {
             _graphicForm = form;
             _graphicForm.BackColor = _backgroundOutsideColor;
             _fixedHeight = _graphicForm.Height;
             _fixedWidth = _graphicForm.Width;
 
-            _repository = repository;
+            _graphModel = graphModel;
 
             _graphicForm.Shown += _graphicForm_Shown;
             _graphicForm.ResizeEnd += _graphicForm_ResizeEnd;
 
-            _repository.OnAddVertex += _repository_OnAddVertex;
-            _repository.OnRemoveVertexes += _repository_OnRemoveVertexes;
-            _repository.OnAddEdge += _repository_OnAddEdge;
-            _repository.OnRemoveEdges += _repository_OnRemoveEdges;
+            _graphModel.OnAddVertex += _repository_OnAddVertex;
+            _graphModel.OnRemoveVertexes += _repository_OnRemoveVertexes;
+            _graphModel.OnAddEdge += _repository_OnAddEdge;
+            _graphModel.OnRemoveEdges += _repository_OnRemoveEdges;
 
-            _repository.OnVertexesSelected += _repository_OnVertexesSelected;
-            _repository.OnClearSelectedVertexes += _repository_OnClearSelectedVertexes;
-            _repository.OnEdgesSelected += _repository_OnEdgesSelected;
-            _repository.OnClearSelectedEdges += _repository_OnClearSelectedEdges;
+            _graphModel.OnVertexesSelected += _repository_OnVertexesSelected;
+            _graphModel.OnClearSelectedVertexes += _repository_OnClearSelectedVertexes;
+            _graphModel.OnEdgesSelected += _repository_OnEdgesSelected;
+            _graphModel.OnClearSelectedEdges += _repository_OnClearSelectedEdges;
 
-            _repository.OnSettingSourceVertex += _repository_OnSettingSourceVertex;
-            _repository.OnRemovingSourceVertex += _repository_OnRemovingSourceVertex;
+            _graphModel.OnSettingSourceVertex += _repository_OnSettingSourceVertex;
+            _graphModel.OnRemovingSourceVertex += _repository_OnRemovingSourceVertex;
 
-            _repository.OnVertexesLocationChanged += _repository_OnVertexesLocationChanged;
-            _repository.OnMergeVertexes += _repository_OnMergeVertexes;
+            _graphModel.OnVertexesLocationChanged += _repository_OnVertexesLocationChanged;
+            _graphModel.OnMergeVertexes += _repository_OnMergeVertexes;
         }
 
         private void _graphicForm_Shown(object sender, System.EventArgs e)
@@ -73,7 +73,7 @@ namespace GraphViewAdapters.WinForms
             //update points
             if (_saveProportions)
             {
-                foreach (var vertex in _repository.Vertexes)
+                foreach (var vertex in _graphModel.Vertexes)
                 {
                     var newX = (int)((double)vertex.ClientRectangle.Location.X / _fixedWidth * _graphicForm.Width);
                     var newY = (int)((double)vertex.ClientRectangle.Location.Y / _fixedHeight * _graphicForm.Height);
@@ -93,9 +93,9 @@ namespace GraphViewAdapters.WinForms
             _graphics.Clear(_backgroundLayoutColor);
 
             //draw edges
-            foreach (var edge in _repository.Edges)
+            foreach (var edge in _graphModel.Edges)
             {
-                if (_repository.SelectedEdges.Contains(edge))
+                if (_graphModel.SelectedEdges.Contains(edge))
                 {
                     DrawSelectedEdge(edge);
                 }
@@ -107,17 +107,17 @@ namespace GraphViewAdapters.WinForms
 
             //draw vertexes
             //draw vertex again (look in DrawEdge method)
-            foreach (var vertex in _repository.Vertexes)
+            foreach (var vertex in _graphModel.Vertexes)
             {
-                if (_repository.SelectedVertexes.Contains(vertex))
+                if (_graphModel.SelectedVertexes.Contains(vertex))
                 {
                     DrawSelectedVertex(vertex);
                 }
                 else
                 {
-                    if (vertex == _repository.СonnectingVertex)
+                    if (vertex == _graphModel.СonnectingVertex)
                     {
-                        DrawConnectingVertex(_repository.СonnectingVertex);
+                        DrawConnectingVertex(_graphModel.СonnectingVertex);
                     }
                     else
                     {

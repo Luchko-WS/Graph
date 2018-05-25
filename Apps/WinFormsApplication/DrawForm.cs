@@ -7,7 +7,7 @@ namespace WinFormsApplication
 {
     public partial class DrawForm : Form
     {
-        GraphElementsRepository _repository;
+        GraphModel _graphModel;
         WinFormsViewAdapter _viewerAdapter;
         bool _drawingKeyIsPressed = false;
         bool _connectingKeyIsPressed = false;
@@ -20,8 +20,8 @@ namespace WinFormsApplication
         public DrawForm()
         {
             InitializeComponent();
-            _repository = new GraphElementsRepository();
-            _viewerAdapter = new WinFormsViewAdapter(this, _repository)
+            _graphModel = new GraphModel();
+            _viewerAdapter = new WinFormsViewAdapter(this, _graphModel)
             {
                 SaveProportions = true
             };
@@ -39,7 +39,7 @@ namespace WinFormsApplication
                 case Keys.A:
                     if (_ctrlKeyIsPressed)
                     {
-                        _repository.SelectAll();
+                        _graphModel.SelectAll();
                     }
                     _drawingKeyIsPressed = true;
                     break;
@@ -50,7 +50,7 @@ namespace WinFormsApplication
                     _choosingConnectingSourceKeyIsPressed = true;
                     break;
                 case Keys.Delete:
-                    _repository.RemoveSelectedItems();
+                    _graphModel.RemoveSelectedItems();
                     break;
                 case Keys.ControlKey:
                     _ctrlKeyIsPressed = true;
@@ -95,15 +95,15 @@ namespace WinFormsApplication
             {
                 if (_drawingKeyIsPressed)
                 {
-                    _repository.CreateVertex(e.X, e.Y);
+                    _graphModel.CreateVertex(e.X, e.Y);
                 }
                 else if (_connectingKeyIsPressed)
                 {
-                    _repository.CreateEdge(e.X, e.Y);
+                    _graphModel.CreateEdge(e.X, e.Y);
                 }
                 else if (_choosingConnectingSourceKeyIsPressed)
                 {
-                    _repository.SetConnectingVertex(e.X, e.Y);
+                    _graphModel.SetConnectingVertex(e.X, e.Y);
                 }
                 else if (_moveSelectedVertexesKeyIsPressed)
                 {
@@ -111,17 +111,17 @@ namespace WinFormsApplication
                 }
                 else if (_mergeSelectedVertexesIntoVertexKeyIsPressed)
                 {
-                    _repository.MergeSelectedVertexesIntoNewVertex(e.X, e.Y);
+                    _graphModel.MergeSelectedVertexesIntoNewVertex(e.X, e.Y);
                 }
                 else
                 {
                     if (_ctrlKeyIsPressed)
                     {
-                        _repository.SelectElement(e.X, e.Y, multipleSelection: true);
+                        _graphModel.SelectElement(e.X, e.Y, multipleSelection: true);
                     }
                     else
                     {
-                        _repository.SelectElement(e.X, e.Y, multipleSelection: false);
+                        _graphModel.SelectElement(e.X, e.Y, multipleSelection: false);
                     }
                 }
             }
@@ -135,7 +135,7 @@ namespace WinFormsApplication
                 {
                     int deltaX = e.Location.X - _savedMouseLocation.X;
                     int deltaY = e.Location.Y - _savedMouseLocation.Y;
-                    _repository.MoveSelectedVertexes(deltaX, deltaY);
+                    _graphModel.MoveSelectedVertexes(deltaX, deltaY);
                 }
             }
         }
