@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Graph\Graph.csproj", "{94CA4B4D-4272-4365-AE41-710ADCDDEDA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Libs\Graph\Graph.csproj", "{94CA4B4D-4272-4365-AE41-710ADCDDEDA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApplication", "WinFormsApplication\WinFormsApplication.csproj", "{350D80E5-210C-44DB-B524-C69A776FE023}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApplication", "Apps\WinFormsApplication\WinFormsApplication.csproj", "{350D80E5-210C-44DB-B524-C69A776FE023}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

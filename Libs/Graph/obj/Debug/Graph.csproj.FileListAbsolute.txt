@@ -1,0 +1,8 @@
+C:\Users\ALuchko\source\repos\Graph\Graph\bin\Debug\Graph.dll
+C:\Users\ALuchko\source\repos\Graph\Graph\bin\Debug\Graph.pdb
+C:\Users\ALuchko\source\repos\Graph\Graph\obj\Debug\Graph.dll
+C:\Users\ALuchko\source\repos\Graph\Graph\obj\Debug\Graph.pdb
+C:\Users\ALuchko\source\repos\Graph\Libs\Graph\bin\Debug\Graph.dll
+C:\Users\ALuchko\source\repos\Graph\Libs\Graph\bin\Debug\Graph.pdb
+C:\Users\ALuchko\source\repos\Graph\Libs\Graph\obj\Debug\Graph.dll
+C:\Users\ALuchko\source\repos\Graph\Libs\Graph\obj\Debug\Graph.pdb
