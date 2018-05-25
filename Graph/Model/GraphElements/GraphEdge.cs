@@ -49,6 +49,11 @@ namespace Graph.Model.Elements
             }
         }
 
+        public bool HasDirection
+        {
+            get { return _hasDirection; }
+        }
+
         public static double WidthCoef
         {
             get { return _widthCoef; }

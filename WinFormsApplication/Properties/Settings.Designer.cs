@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Graph.Properties
+namespace WinFormsApplication.Properties
 {
 
 

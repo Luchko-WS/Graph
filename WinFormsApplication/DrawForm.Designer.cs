@@ -1,4 +1,4 @@
-﻿namespace Graph
+﻿namespace WinFormsApplication
 {
     partial class DrawForm
     {

@@ -3,7 +3,7 @@ using Graph.ViewModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Graph
+namespace WinFormsApplication
 {
     public partial class DrawForm : Form
     {
@@ -105,11 +105,11 @@ namespace Graph
                 {
                     _repository.SetConnectingVertex(e.X, e.Y);
                 }
-                else if(_moveSelectedVertexesKeyIsPressed)
+                else if (_moveSelectedVertexesKeyIsPressed)
                 {
                     _savedMouseLocation = e.Location;
                 }
-                else if(_mergeSelectedVertexesIntoVertexKeyIsPressed)
+                else if (_mergeSelectedVertexesIntoVertexKeyIsPressed)
                 {
                     _repository.MergeSelectedVertexesIntoNewVertex(e.X, e.Y);
                 }
@@ -129,9 +129,9 @@ namespace Graph
 
         private void DrawForm_MouseUp(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
-                if(_moveSelectedVertexesKeyIsPressed)
+                if (_moveSelectedVertexesKeyIsPressed)
                 {
                     int deltaX = e.Location.X - _savedMouseLocation.X;
                     int deltaY = e.Location.Y - _savedMouseLocation.Y;
